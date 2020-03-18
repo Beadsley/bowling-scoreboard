@@ -12,6 +12,7 @@ function EnterScore() {
     setRoll(r => r + 1)
     if (roll === 2 || frameScore === 10) { setScore([]); setRoll(0); setFrameScore(0) }
     generateScoreButtons();
+    // eslint-disable-next-line
   }, [score]);
 
   function generateScoreButtons() {
@@ -22,6 +23,7 @@ function EnterScore() {
     }
     setButtons(array);
   }
+
 
   return (
     <>
