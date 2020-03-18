@@ -6,7 +6,9 @@
   "scripts": {
     "lint": "npx eslint -c .eslintrc.json ./**/*.js",
     "test": "mocha --reporter spec --exit \"./{,!(node_modules)/**/}*.spec.js\"",
-    "watch": "onchange '**/*.js' -- npm run test"
+    "watch": "onchange '**/*.js' -- npm run test",
+    "start": "node server/index.js",
+    "dev": "nodemon server/index.js"
   },
   "keywords": [],
   "author": "Jakob Leczinsky",
@@ -17,6 +19,7 @@
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-mocha": "^6.2.1",
     "mocha": "^6.2.2",
+    "nodemon": "^2.0.2",
     "onchange": "^6.1.0"
   },
   "dependencies": {

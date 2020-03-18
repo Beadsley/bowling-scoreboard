@@ -15,7 +15,7 @@ function EnterScore() {
   }, [score]);
 
   function generateScoreButtons() {
-    
+
     let array = [];
     for (let index = 0; index <= 10 - frameScore; index++) {
       array.push(<button onClick={() => { setScore([...score, index]); setFrameScore(index) }}>{index}</button>)
