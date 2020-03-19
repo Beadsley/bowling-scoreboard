@@ -3,12 +3,14 @@ import '../styles/App.css';
 
 function EnterName() {
 
-    const [players, setPlayers] = useState([]);
+    const [player, setPlayer] = useState();
     const [boards, setBoards] = useState([]);
 
     useEffect(() => {
-        generateBoard();
-    }, []);
+        if(player){
+            generateBoard();
+        }
+    }, [player]);
 
     async function fetchData(name) {
 
@@ -19,7 +21,8 @@ function EnterName() {
             })
         })
         const { id } = await response.json();
-        setPlayers([...players, { id, name }])
+        setPlayer({ id, name })
+
     }
 
     function generateBoard() {
@@ -28,14 +31,14 @@ function EnterName() {
             array.push(
                 <div className="frame">
                     <div className="frame-element">{index}</div>
-                    {index === 10 ? <div class="roll frame-element"> <div> 6 </div><div> 7 </div> <div> 8 </div>  </div> : <div class="roll frame-element"><div> 6 </div><div> 7 </div></div>}
+                    {index === 10 ? <div className="roll frame-element"> <div> 6 </div><div> 7 </div> <div> 8 </div>  </div> : <div className="roll frame-element"><div> 6 </div><div> 7 </div></div>}
                     <div className="frame-element">{'score'}</div>
                 </div>
             )
         }
-        array.unshift(<div className="frame frame-element"> NAME</div>)
+        array.unshift(<div className="frame frame-element name"> {player.name}</div>)
         array.push(<div className="frame frame-element"> TOTAL</div>)
-        setBoards(array);
+        setBoards([...boards, array]);
     }
 
     return (
@@ -46,11 +49,10 @@ function EnterName() {
 
             }}>
                 <input type="text" name="name" id="nameInput" required placeholder="Add a player..."
-                    autoComplete="off" />
+                    autoComplete="off" maxlength="10 "/>
             </form>
-            {players.map((x, i) => <div key={i} className="player-container"> {x.name}</div>)}
-            <div className="board-container">
-                {boards}
+            <div className="boards-container">
+                {boards.map(board => <div className="board-container">{board}</div>)}
             </div>
 
         </>

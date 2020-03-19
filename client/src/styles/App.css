@@ -2,17 +2,26 @@
   text-align: center;
   padding: 1%;
 }
-.board-container{
+
+.board-container {
   display: grid;
-  grid-auto-flow: column; 
+  grid-auto-flow: column;
 }
-.frame-element{
+.boards-container {
+  display: grid;
+  grid-gap: 15px;
+}
+
+.frame-element {
   border: 1px solid black;
 }
-.roll{
+
+.roll {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
-  
+}
+.name {
+  min-width: 100px;
 }
