@@ -15,11 +15,10 @@ function EnterScore() {
 
     if (game.started) {
 
-      fetchPlayers()
-      setRoll(r => r + 1)
-      if (roll === 2 || frameScore === 10) { setGame({ started: game.started, score: [] }); setRoll(0); setFrameScore(0) }
+      fetchPlayers(); 
+      console.log('roll: ',roll, 'score: ', game.score);
+      if (roll === 2 || frameScore === 10) { addScore() }
       generateScoreButtons();
-      console.log(players);
 
     }
 
@@ -39,12 +38,27 @@ function EnterScore() {
         playing: false
       })
     }
-    setPlayers(playersArray)
+    setPlayers(playersArray) // add players to the game array
   }
 
-  function pushScore(index) {
-    setGame({ started: game.started, score: [...game.score, index] });
-    setFrameScore(index)    
+  async function addScore() {
+    console.log(game.score);
+    console.log('here');
+    console.log(roll);
+    
+    const response = await fetch(`/api/player/score/${players[0].id}`, {
+      method: 'put',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        "roll": game.score
+      })
+    })
+    console.log(await response.json());
+    setRoll(0); 
+    setFrameScore(0);
+    setGame({ started: game.started, score: [] }); 
   }
 
 
@@ -52,7 +66,7 @@ function EnterScore() {
 
     let array = [];
     for (let index = 1; index <= 10 - frameScore; index++) {
-      array.push(<button onClick={() => { pushScore(index) }}>{index}</button>)
+      array.push(<button onClick={() => { setGame({ started: game.started, score: [...game.score, index] }); setFrameScore(index); setRoll(r => r + 1) }}>{index}</button>)
     }
     setButtons(array);
   }
