@@ -123,6 +123,7 @@ module.exports = {
     getConsecutiveScores,
     getGameOver,
     addPlayer,
-    findPlayerByid
+    findPlayerByid,
+    players
 };
 

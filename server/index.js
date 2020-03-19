@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const uuid = require('uuid').v1;
 const morgan = require('morgan')
-const { addScore, gameRestart, getTotalScore, getFrames, getScores, getConsecutiveScores, getGameOver, addPlayer, findPlayerByid } = require('./evalScore.js');
+const { addScore, gameRestart, getTotalScore, getFrames, getScores, getConsecutiveScores, getGameOver, addPlayer, findPlayerByid, players } = require('./evalScore.js');
 
 const app = express();
 
@@ -10,7 +10,7 @@ app.use(morgan('tiny'))
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-const PORT=process.env.PORT || 8080
+const PORT = process.env.PORT || 8080
 console.log(PORT);
 
 app.listen(PORT, () => {
@@ -105,6 +105,10 @@ app.post('/api/player', (req, res) => {
     addPlayer(name, id);
     res.status(200).json({ id: id, name: name });
 
+});
+
+app.get('/api/players', (req, res) => {
+    res.status(200).json(players);
 });
 
 /**
