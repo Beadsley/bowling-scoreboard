@@ -7,23 +7,23 @@ function EnterName(game) {
     const [boards, setBoards] = useState([]);
 
     useEffect(() => {
-        console.log(game);
-        
-        if(player){
+        console.log('game', game.started);
+
+        if (player) {
             generateBoard();
         }
     }, [player]);
 
     async function addPlayer(name) {
         console.log(name);
-        
+
         const response = await fetch('/api/player/', {
             method: 'post',
             headers: {
                 'Content-Type': 'application/json'
-              },
+            },
             body: JSON.stringify({
-                name:name
+                name: name
             })
         })
         const { id } = await response.json();
@@ -49,13 +49,13 @@ function EnterName(game) {
 
     return (
         <>
-            <form style={game.started? {display:"none"}:{display:"block"}} onSubmit={(e) => {
+            <form style={game.started ? { display: "none" } : { display: "block" }} onSubmit={(e) => {
                 e.preventDefault();
                 addPlayer(e.target[0].value)
 
             }}>
                 <input type="text" name="name" id="nameInput" required placeholder="Add a player..."
-                    autoComplete="off" maxlength="10 "/>
+                    autoComplete="off" maxlength="10 " />
             </form>
             <div className="boards-container">
                 {boards.map(board => <div className="board-container">{board}</div>)}
