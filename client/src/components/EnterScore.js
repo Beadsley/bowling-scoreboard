@@ -16,8 +16,12 @@ function EnterScore() {
     if (game.started) {
 
       fetchPlayers(); 
-      console.log('roll: ',roll, 'score: ', game.score);
-      if (roll === 2 || frameScore === 10) { addScore() }
+      console.log('roll: ', roll, 'score: ', game.score);
+      if (frameScore === 10 && roll !==2){
+        setRoll(r => r + 1);
+        setGame({ started: game.started, score: [10, 0] })
+      }
+      if (roll === 2 ) { addScore() }
       generateScoreButtons();
 
     }
@@ -42,9 +46,7 @@ function EnterScore() {
   }
 
   async function addScore() {
-    console.log(game.score);
-    console.log('here');
-    console.log(roll);
+    console.log('FETCH: ','roll: ',roll, 'score: ', game.score);
     
     const response = await fetch(`/api/player/score/${players[0].id}`, {
       method: 'put',
@@ -55,7 +57,7 @@ function EnterScore() {
         "roll": game.score
       })
     })
-    console.log(await response.json());
+    console.log('response: ',await response.json());
     setRoll(0); 
     setFrameScore(0);
     setGame({ started: game.started, score: [] }); 
@@ -70,9 +72,6 @@ function EnterScore() {
     }
     setButtons(array);
   }
-
-
-
 
   return (
     <>

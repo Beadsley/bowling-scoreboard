@@ -130,7 +130,6 @@ app.put('/api/player/score/:id', (req, res) => {
     const score = req.body.roll;
     const validate = validation(score, getFrames(id));
     const exists = findPlayerByid(id);
-    console.log(score);
     
     if (!exists) {
         res.status(400).send({ error: `player with id: [${id}] doesn\'t exist` });
