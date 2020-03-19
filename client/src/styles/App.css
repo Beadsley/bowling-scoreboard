@@ -1,0 +1,18 @@
+.App {
+  text-align: center;
+  padding: 1%;
+}
+.board-container{
+  display: grid;
+  grid-auto-flow: column; 
+}
+.frame-element{
+  border: 1px solid black;
+}
+.roll{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  
+}
