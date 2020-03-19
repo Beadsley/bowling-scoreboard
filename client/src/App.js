@@ -1,7 +1,6 @@
 import React from 'react';
 import './styles/App.css';
 import EnterScore from './components/EnterScore';
-import EnterName from './components/EnterName';
 
 function App() {
 
@@ -11,7 +10,6 @@ function App() {
         <h1>Scoreboard</h1>
       </header>
       <EnterScore />
-      <EnterName />
 
     </div>
   );

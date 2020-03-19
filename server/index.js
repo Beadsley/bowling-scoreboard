@@ -101,6 +101,8 @@ app.delete('/api/game', (req, res) => {
 app.post('/api/player', (req, res) => {
 
     const name = req.body.name;
+    console.log(req.body);
+    
     const id = uuid();
     addPlayer(name, id);
     res.status(200).json({ id: id, name: name });
