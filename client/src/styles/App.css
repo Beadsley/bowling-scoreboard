@@ -21,6 +21,10 @@
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
+  min-height: 18px;
+  
+}
+.roll div{
 }
 .name {
   min-width: 100px;

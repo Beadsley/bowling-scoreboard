@@ -3,31 +3,25 @@ import EnterName from './EnterName';
 
 function EnterScore() {
 
-  const [roll, setRoll] = useState(0);
-  const [frameScore, setFrameScore] = useState(0);
   const [buttons, setButtons] = useState([]);
-  const [game, setGame] = useState({ started: false, score: [] });
+  const [game, setGame] = useState({ started: false, roll: 0, score: [], frame: 1, frameScore: 0, currentPlayer: undefined });
   const [players, setPlayers] = useState([]);
-
-
 
   useEffect(() => {
 
     if (game.started) {
-
-      console.log('roll: ', roll, 'score: ', game.score);
-      if (frameScore === 10 && roll !== 2) {
-        setRoll(r => r + 1);
-        setGame({ started: game.started, score: [10, 0] })
+      
+      if (game.frameScore === 10 && game.roll !== 2) {
+        setGame({ started: game.started, roll: game.roll + 1, score: [10, 0], frame: game.frame, frameScore: game.frameScore, currentPlayer: undefined })
       }
-      if (roll === 2) { addScore() }
+      if (game.roll === 2) { addScore() }
       generateScoreButtons();
 
     }
 
 
     // eslint-disable-next-line
-  }, [game]);
+  }, [game.score, game.started]);
 
   useEffect(() => {
     if (game.started) {
@@ -49,10 +43,11 @@ function EnterScore() {
       })
     }
     setPlayers(playersArray) // add players to the game array
+    setGame({ started: game.started, roll: game.roll, score: [10, 0], frame: game.frame, frameScore: game.frameScore, currentPlayer: playersArray[0].id })
+
   }
 
   async function addScore() {
-    console.log('FETCH: ', 'roll: ', roll, 'score: ', game.score);
 
     const response = await fetch(`/api/player/score/${players[0].id}`, {
       method: 'put',
@@ -63,18 +58,16 @@ function EnterScore() {
         "roll": game.score
       })
     })
-    console.log('response: ', await response.json());
-    setRoll(0);
-    setFrameScore(0);
-    setGame({ started: game.started, score: [] });
+    setGame({ started: game.started, score: [], roll: 0, frameScore: 0, frame: game.frame + 1, currentPlayer: undefined });
   }
 
 
   function generateScoreButtons() {
 
     let array = [];
-    for (let index = 1; index <= 10 - frameScore; index++) {
-      array.push(<button onClick={() => { setGame({ started: game.started, score: [...game.score, index] }); setFrameScore(index); setRoll(r => r + 1) }}>{index}</button>)
+    for (let index = 1; index <= 10 - game.frameScore; index++) {
+
+      array.push(<button onClick={() => { setGame({ started: game.started, roll: game.roll + 1, score: [...game.score, index], frame: game.frame, frameScore: index, currentPlayer: undefined }) }}>{index}</button>)
     }
     setButtons(array);
   }
@@ -82,7 +75,7 @@ function EnterScore() {
   return (
     <>
       {buttons}
-      <button onClick={() => setGame({ started: true, score: game.score })}>StartGame</button>
+      <button onClick={() => setGame({ started: true, roll: game.roll, score: game.score, frame: game.frame, frameScore: game.frameScore, currentPlayer: undefined })}>StartGame</button>
       <EnterName {...game} />
     </>
   );

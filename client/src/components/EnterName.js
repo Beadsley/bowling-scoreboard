@@ -7,15 +7,18 @@ function EnterName(game) {
     const [boards, setBoards] = useState([]);
 
     useEffect(() => {
-        console.log('game', game.started);
+        console.log('game', game.started, game.currentPlayer);
 
         if (player) {
             generateBoard();
         }
     }, [player]);
 
+    useEffect(() => {
+
+    }, [game.frame]);
+
     async function addPlayer(name) {
-        console.log(name);
 
         const response = await fetch('/api/player/', {
             method: 'post',
@@ -29,6 +32,7 @@ function EnterName(game) {
         const { id } = await response.json();
         setPlayer({ id, name })
 
+
     }
 
     function generateBoard() {
@@ -37,7 +41,7 @@ function EnterName(game) {
             array.push(
                 <div className="frame">
                     <div className="frame-element">{index}</div>
-                    {index === 10 ? <div className="roll frame-element"> <div> 6 </div><div> 7 </div> <div> 8 </div>  </div> : <div className="roll frame-element"><div> 6 </div><div> 7 </div></div>}
+                    {index === 10 ? <div className="roll frame-element"> <div>  </div><div>  </div> <div>  </div>  </div> : <div className="roll frame-element"><div>  </div><div>  </div></div>}
                     <div className="frame-element">{'score'}</div>
                 </div>
             )
