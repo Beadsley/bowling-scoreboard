@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { useAlert } from 'react-alert'
 import '../styles/App.css';
 
 function EnterName(game) {
-    console.log(game.onClick);
+
+    const alert = useAlert()
 
     const [player, setPlayer] = useState();
     const [boards, setBoards] = useState([]);
@@ -10,8 +12,6 @@ function EnterName(game) {
     useEffect(() => {
 
         if (player) {
-            console.log(game.currentPlayer);
-            console.log(game.frame);
 
             generateBoard();
         }
@@ -135,7 +135,7 @@ function EnterName(game) {
                 <input type="text" name="name" id="nameInput" required placeholder="Add a player..."
                     autoComplete="off" maxlength="10 " />
             </form>
-            <button onClick={player ? game.onClick : () => { alert('ohno') }}>Start game</button>
+            <button onClick={player ? game.startGame : () => { alert.show('add a player...') }}>Start game</button>
             <div className="boards-container">
                 {boards.map(board => <div className="board-container">{board.score}</div>)}
             </div>

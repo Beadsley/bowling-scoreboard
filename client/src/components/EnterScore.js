@@ -59,7 +59,7 @@ function EnterScore() {
       })
     })
     console.log(await response.json());
-    console.log(players);
+
     let index = players.findIndex(player => player.id == game.currentPlayer)
     if (index === players.length - 1) {
       index = 0;
@@ -102,7 +102,7 @@ function EnterScore() {
     <>
       {buttons}
       {/* <button onClick={() => startGame()}>StartGame</button> */}
-      <EnterName {...game} onClick={startGame} />
+      <EnterName {...game} startGame={startGame} />
     </>
   );
 }
