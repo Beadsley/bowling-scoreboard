@@ -83,8 +83,8 @@ function EnterName(game) {
 
             array.unshift(<div className="frame frame-element name"> {player.name}</div>)
             array.push(<div className="frame frame-element"> {total}</div>)
-
-            boards.splice(0, 1, array);
+            const index = boards.findIndex(board => board.id == game.currentPlayer);
+            boards.splice(index, 1, { id: game.currentPlayer, score: array });
             setBoards([...boards]);
 
         }
@@ -100,7 +100,7 @@ function EnterName(game) {
             }
             array.unshift(<div className="frame frame-element name"> {player.name}</div>)
             array.push(<div className="frame frame-element"> TOTAL</div>)
-            setBoards([...boards, array]);
+            setBoards([...boards, { id: player.id, score: array }]);
         }
 
     }
@@ -116,7 +116,7 @@ function EnterName(game) {
                     autoComplete="off" maxlength="10 " />
             </form>
             <div className="boards-container">
-                {boards.map(board => <div className="board-container">{board}</div>)}
+                {boards.map(board => <div className="board-container">{board.score}</div>)}
             </div>
 
         </>
