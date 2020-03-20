@@ -7,7 +7,6 @@ function EnterName(game) {
     const [boards, setBoards] = useState([]);
 
     useEffect(() => {
-        console.log('game', game.started, game.currentPlayer);
 
         if (player) {
             generateBoard();
@@ -15,7 +14,9 @@ function EnterName(game) {
     }, [player]);
 
     useEffect(() => {
-
+        if (game.frame > 1) {
+            fetchScores()
+        }
     }, [game.frame]);
 
     async function addPlayer(name) {
@@ -32,6 +33,15 @@ function EnterName(game) {
         const { id } = await response.json();
         setPlayer({ id, name })
 
+
+    }
+
+    async function fetchScores() {
+        console.log(game);
+
+        const response = await fetch(`/api/player/scores/${game.currentPlayer}`)
+        const result = await response.json();
+        console.log(result);
 
     }
 

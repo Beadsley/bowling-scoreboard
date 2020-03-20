@@ -6,6 +6,7 @@ const gameRestart = () => {
     players = {
 
     }
+
 }
 
 const addPlayer = (name, id) => {
