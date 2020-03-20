@@ -37,9 +37,18 @@ function EnterName(game) {
         return result;
 
     }
-    async function totalScore() {
+
+    async function fetchTotalScore() {
 
         const response = await fetch(`/api/player/total/${game.currentPlayer}`)
+        const result = await response.json();
+        return result;
+
+    }
+
+    async function fetchConsecutiveScores() {
+
+        const response = await fetch(`/api/player/consecutiveScores/${game.currentPlayer}`)
         const result = await response.json();
         return result;
 
@@ -50,24 +59,27 @@ function EnterName(game) {
         if (game.frame > 1) {
 
             const scores = await fetchScores();
+            const consecutiveScores = await fetchConsecutiveScores();
 
             for (let index = 0; index <= 9; index++) {
                 let roll1 = "";
                 let roll2 = "";
+                let consecutiveScore = ".";
                 if (index < scores.length) {
                     roll1 = scores[index][0]
                     roll2 = scores[index][1]
-                    console.log(roll1, roll2);
+                    consecutiveScore = consecutiveScores[index]
                 }
+                
                 array.push(
                     <div className="frame">
                         <div className="frame-element">{index + 1}</div>
                         {index === 10 ? <div className="roll frame-element"> <div>  </div><div>  </div> <div>  </div>  </div> : <div className="roll frame-element"><div>{roll1}</div><div> {roll2} </div></div>}
-                        <div className="frame-element">{'score'}</div>
+                        <div className="frame-element">{consecutiveScore}</div>
                     </div>
                 )
             }
-            const total = await totalScore();
+            const total = await fetchTotalScore();
 
             array.unshift(<div className="frame frame-element name"> {player.name}</div>)
             array.push(<div className="frame frame-element"> {total}</div>)
