@@ -37,13 +37,19 @@ function EnterName(game) {
         return result;
 
     }
+    async function totalScore() {
+
+        const response = await fetch(`/api/player/total/${game.currentPlayer}`)
+        const result = await response.json();
+        return result;
+
+    }
 
     async function generateBoard() {
         let array = [];
         if (game.frame > 1) {
-            console.log('heres');
+
             const scores = await fetchScores();
-            console.log(scores);
 
             for (let index = 0; index <= 9; index++) {
                 let roll1 = "";
@@ -61,8 +67,10 @@ function EnterName(game) {
                     </div>
                 )
             }
+            const total = await totalScore();
+
             array.unshift(<div className="frame frame-element name"> {player.name}</div>)
-            array.push(<div className="frame frame-element"> TOTAL</div>)
+            array.push(<div className="frame frame-element"> {total}</div>)
             setBoards([array]);
 
         }
