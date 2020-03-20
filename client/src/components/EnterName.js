@@ -9,9 +9,12 @@ function EnterName(game) {
     useEffect(() => {
 
         if (player) {
+            console.log(game.currentPlayer);
+            console.log(game.frame);
+
             generateBoard();
         }
-    }, [player, game.frame]);
+    }, [player, game.currentPlayer, game.frame]);
 
     async function addPlayer(name) {
 
@@ -87,6 +90,22 @@ function EnterName(game) {
             boards.splice(index, 1, { id: game.currentPlayer, score: array });
             setBoards([...boards]);
 
+        }
+        else if (game.frame === 1 && game.started) {
+            for (let index = 1; index <= 10; index++) {
+                array.push(
+                    <div className="frame">
+                        <div className="frame-element">{index}</div>
+                        {index === 10 ? <div className="roll frame-element"> <div>  </div><div>  </div> <div>  </div>  </div> : <div className="roll frame-element"><div>  </div><div>  </div></div>}
+                        <div className="frame-element">{'score'}</div>
+                    </div>
+                )
+            }
+            array.unshift(<div className="frame frame-element name"> {player.name}</div>)
+            array.push(<div className="frame frame-element"> TOTAL</div>)
+            const index = boards.findIndex(board => board.id == game.currentPlayer);
+            boards.splice(index, 1, { id: game.currentPlayer, score: array });
+            setBoards([...boards]);
         }
         else {
             for (let index = 1; index <= 10; index++) {

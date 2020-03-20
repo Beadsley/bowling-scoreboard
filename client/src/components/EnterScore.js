@@ -8,7 +8,6 @@ function EnterScore() {
   const [players, setPlayers] = useState([]);
 
   useEffect(() => {
-    console.log(players);
 
     if (game.started) {
 
@@ -49,8 +48,8 @@ function EnterScore() {
   }
 
   async function addScore() {
-    
-    const response = await fetch(`/api/player/score/${players[0].id}`, {
+
+    const response = await fetch(`/api/player/score/${game.currentPlayer}`, {
       method: 'put',
       headers: {
         'Content-Type': 'application/json'
@@ -60,8 +59,19 @@ function EnterScore() {
       })
     })
     console.log(await response.json());
+    console.log(players);
+    let index = players.findIndex(player => player.id == game.currentPlayer)
+    if (index === players.length - 1) {
+      index = 0;
+      const nextPlayer = players[index].id;
+      setGame({ started: game.started, score: [], roll: 0, frameScore: 0, frame: game.frame + 1, currentPlayer: nextPlayer });
+    }
+    else {
+      index++;
+      const nextPlayer = players[index].id;
+      setGame({ started: game.started, score: [], roll: 0, frameScore: 0, frame: game.frame, currentPlayer: nextPlayer });
+    }
 
-    setGame({ started: game.started, score: [], roll: 0, frameScore: 0, frame: game.frame + 1, currentPlayer: game.currentPlayer });
   }
 
 
