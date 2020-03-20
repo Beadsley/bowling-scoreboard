@@ -49,7 +49,7 @@ function EnterScore() {
   }
 
   async function addScore() {
-
+    
     const response = await fetch(`/api/player/score/${players[0].id}`, {
       method: 'put',
       headers: {
@@ -59,7 +59,7 @@ function EnterScore() {
         "roll": game.score
       })
     })
-    console.log(response);
+    console.log(await response.json());
 
     setGame({ started: game.started, score: [], roll: 0, frameScore: 0, frame: game.frame + 1, currentPlayer: game.currentPlayer });
   }
