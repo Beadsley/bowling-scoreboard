@@ -33,7 +33,7 @@ function EnterName(game) {
 
     function generateBoard() {
         let array = [];
-        for (let index = 0; index <= 10; index++) {
+        for (let index = 1; index <= 10; index++) {
             array.push(
                 <div className="frame">
                     <div className="frame-element">{index}</div>

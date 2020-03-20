@@ -15,13 +15,12 @@ function EnterScore() {
 
     if (game.started) {
 
-      fetchPlayers(); 
       console.log('roll: ', roll, 'score: ', game.score);
-      if (frameScore === 10 && roll !==2){
+      if (frameScore === 10 && roll !== 2) {
         setRoll(r => r + 1);
         setGame({ started: game.started, score: [10, 0] })
       }
-      if (roll === 2 ) { addScore() }
+      if (roll === 2) { addScore() }
       generateScoreButtons();
 
     }
@@ -29,6 +28,13 @@ function EnterScore() {
 
     // eslint-disable-next-line
   }, [game]);
+
+  useEffect(() => {
+    if (game.started) {
+      fetchPlayers();
+    }
+
+  }, [game.started])
 
   async function fetchPlayers() {
 
@@ -46,8 +52,8 @@ function EnterScore() {
   }
 
   async function addScore() {
-    console.log('FETCH: ','roll: ',roll, 'score: ', game.score);
-    
+    console.log('FETCH: ', 'roll: ', roll, 'score: ', game.score);
+
     const response = await fetch(`/api/player/score/${players[0].id}`, {
       method: 'put',
       headers: {
@@ -57,10 +63,10 @@ function EnterScore() {
         "roll": game.score
       })
     })
-    console.log('response: ',await response.json());
-    setRoll(0); 
+    console.log('response: ', await response.json());
+    setRoll(0);
     setFrameScore(0);
-    setGame({ started: game.started, score: [] }); 
+    setGame({ started: game.started, score: [] });
   }
 
 
