@@ -4,7 +4,7 @@ import EnterName from './EnterName';
 function EnterScore() {
 
   const [buttons, setButtons] = useState([]);
-  const [game, setGame] = useState({ started: false, roll: 0, score: [], frame: 1, frameScore: 0, currentPlayer: undefined });
+  const [game, setGame] = useState({ started: false, roll: 0, score: [], frame: 1, frameScore: 0, currentPlayer: undefined, });
   const [players, setPlayers] = useState([]);
 
   useEffect(() => {
@@ -85,11 +85,24 @@ function EnterScore() {
     setButtons(array);
   }
 
+  function startGame() {
+
+    setGame({
+      started: true,
+      roll: game.roll,
+      score: game.score,
+      frame: game.frame,
+      frameScore: game.frameScore,
+      currentPlayer: game.currentPlayer
+    })
+
+  }
+
   return (
     <>
       {buttons}
-      <button onClick={() => setGame({ started: true, roll: game.roll, score: game.score, frame: game.frame, frameScore: game.frameScore, currentPlayer: game.currentPlayer })}>StartGame</button>
-      <EnterName {...game} />
+      {/* <button onClick={() => startGame()}>StartGame</button> */}
+      <EnterName {...game} onClick={startGame} />
     </>
   );
 }

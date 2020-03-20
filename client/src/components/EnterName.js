@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import '../styles/App.css';
 
 function EnterName(game) {
+    console.log(game.onClick);
 
     const [player, setPlayer] = useState();
     const [boards, setBoards] = useState([]);
@@ -134,6 +135,7 @@ function EnterName(game) {
                 <input type="text" name="name" id="nameInput" required placeholder="Add a player..."
                     autoComplete="off" maxlength="10 " />
             </form>
+            <button onClick={player ? game.onClick : () => { alert('ohno') }}>Start game</button>
             <div className="boards-container">
                 {boards.map(board => <div className="board-container">{board.score}</div>)}
             </div>
