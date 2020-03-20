@@ -9,10 +9,10 @@ function EnterScore() {
 
   useEffect(() => {
     console.log(players);
-    
+
     if (game.started) {
 
-      if (game.frameScore === 10 &&  game.roll === 1) {
+      if (game.frameScore === 10 && game.roll === 1) {
         setGame({ started: game.started, roll: game.roll + 1, score: [10, 0], frame: game.frame, frameScore: game.frameScore, currentPlayer: game.currentPlayer })
       }
       if (game.roll === 2) { addScore() }
@@ -22,7 +22,7 @@ function EnterScore() {
 
 
     // eslint-disable-next-line
-  }, [game.score, game.started]);
+  }, [game.score, game.started, game.currentPlayer]);
 
   useEffect(() => {
     if (game.started) {
