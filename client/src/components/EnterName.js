@@ -70,7 +70,7 @@ function EnterName(game) {
                     roll2 = scores[index][1]
                     consecutiveScore = consecutiveScores[index]
                 }
-                
+
                 array.push(
                     <div className="frame">
                         <div className="frame-element">{index + 1}</div>
@@ -83,7 +83,9 @@ function EnterName(game) {
 
             array.unshift(<div className="frame frame-element name"> {player.name}</div>)
             array.push(<div className="frame frame-element"> {total}</div>)
-            setBoards([array]);
+
+            boards.splice(0, 1, array);
+            setBoards([...boards]);
 
         }
         else {
