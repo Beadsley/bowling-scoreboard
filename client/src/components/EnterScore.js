@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import EnterName from './EnterName';
+import Scoreboard from './Scoreboard';
 
 function EnterScore() {
 
@@ -14,13 +14,13 @@ function EnterScore() {
 
       if (game.frameScore === 10 && game.roll === 1 && game.frame < 11) {
         // strike
-        setGame({ started: game.started, roll: game.roll + 1, score: [10, 0], frame: game.frame, frameScore: game.frameScore, currentPlayer: game.currentPlayer })
+        setGame({ ...game, roll: game.roll + 1, score: [10, 0] })
       }
       else if (game.frame === 11) {
         const index = players.findIndex(player => player.id == game.currentPlayer.id);
         if (game.roll === 1 && players[index].frame10Strike === false) {
           // spare 
-          setGame({ started: game.started, roll: game.roll + 1, score: [game.frameScore, 0], frame: game.frame, frameScore: game.frameScore, currentPlayer: game.currentPlayer })
+          setGame({ ...game, roll: game.roll + 1, score: [game.frameScore, 0] })
         }
         else if (players[index].frame10Strike === true) {
           //strike
@@ -28,9 +28,7 @@ function EnterScore() {
 
         }
       }
-      // else if(game.frame === 11 && game.frameScore!==10){ 
-      //   setGame({ started: game.started, roll: game.roll + 1, score: [game.frameScore, 0], frame: game.frame, frameScore: game.frameScore, currentPlayer: game.currentPlayer })
-      // }
+
       if (game.roll === 2) {
         addScore()
       }
@@ -38,41 +36,20 @@ function EnterScore() {
 
     }
 
-
     // eslint-disable-next-line
   }, [game.score, game.started, game.currentPlayer]);
 
   useEffect(() => {
+
     if (game.started) {
       selectPlayer()
-      //fetchPlayers();
     }
 
   }, [game.started])
 
-  async function fetchPlayers() {
-
-    const response = await fetch('/api/players')
-    const result = await response.json();
-    let playersArray = []
-    for (const id in result) {
-      playersArray.push({
-        id: id,
-        name: result[id].name,
-        playing: false,
-        gameOver: false,
-        frame10Strike: false,
-        frame10Spare: false
-      })
-    }
-    setPlayers(playersArray) // add players to the game array
-    setGame({ started: game.started, roll: game.roll, score: game.score, frame: game.frame, frameScore: game.frameScore, currentPlayer: playersArray[0].id })
-
-  }
-
-  //selects the first player
+  //selects the first player, perhaps add to start game
   function selectPlayer() {
-    setGame({ started: game.started, roll: game.roll, score: game.score, frame: game.frame, frameScore: game.frameScore, currentPlayer: { id: players[0].id, name: players[0].name } })
+    setGame({ ...game, currentPlayer: { id: players[0].id, name: players[0].name } })
 
   }
 
@@ -99,79 +76,76 @@ function EnterScore() {
         "roll": game.score
       })
     })
-    console.log(await response.json());
+    //console.log(await response.json());
 
+    selectNextPlayer();
+
+  }
+
+  function selectNextPlayer() {
     let index = players.findIndex(player => player.id == game.currentPlayer.id)
     if (index === players.length - 1) {
       index = 0;
       const nextPlayer = { id: players[index].id, name: players[index].name };
-      setGame({ started: game.started, score: [], roll: 0, frameScore: 0, frame: game.frame + 1, currentPlayer: nextPlayer });
+      setGame({ ...game, score: [], roll: 0, frameScore: 0, frame: game.frame + 1, currentPlayer: nextPlayer });
     }
     else {
       index++;
       const nextPlayer = { id: players[index].id, name: players[index].name };
-      setGame({ started: game.started, score: [], roll: 0, frameScore: 0, frame: game.frame, currentPlayer: nextPlayer });
+      setGame({ ...game, score: [], roll: 0, frameScore: 0, frame: game.frame, currentPlayer: nextPlayer });
     }
+  }
+
+  function evalLastFrame(pin) {
+    const currentPlayerIndex = players.findIndex(player => player.id == game.currentPlayer.id);
+    let stikeinFinalFrame = false;
+    if (game.frame === 10 && pin === 10) { // strike on frame 10
+      players[currentPlayerIndex].frame10Strike = true;
+    }
+    else if (game.frame === 10 && game.score[0] + pin === 10) { // spare on frame 10
+      players[currentPlayerIndex].frame10Spare = true;
+    }
+    else if (game.frame === 10 && game.roll === 1) { //game over
+      players[currentPlayerIndex].gameOver = true;
+    }
+    else if (game.frame === 11 && players[currentPlayerIndex].frame10Strike === true && pin === 10) {
+      stikeinFinalFrame = true;
+    }
+    setPlayers([...players]);
+    return stikeinFinalFrame;
 
   }
 
 
   function generateScoreButtons() {
 
-    let array = [];
-    for (let index = 1; index <= 10 - game.frameScore; index++) {
+    let pins = [];
+    for (let pin = 1; pin <= 10 - game.frameScore; pin++) {
 
-      array.push(<button onClick={() => {
-        const currentPlayerIndex = players.findIndex(player => player.id == game.currentPlayer.id);
-        if (game.frame === 10 && index === 10) { // strike on frame 10
-          players[currentPlayerIndex].frame10Strike = true;
-          setPlayers([...players]);
-        }
-        else if (game.frame === 10 && game.score[0] + index === 10) { // spare on frame 10
-          players[currentPlayerIndex].frame10Spare = true;
-        }
-        else if (game.frame === 10 && game.roll === 1) {
-          players[currentPlayerIndex].gameOver = true;
-        }
-        let strikeRound11 = false;
-        if (players[currentPlayerIndex].frame10Strike === true && game.frame === 11 && index === 10) {
-          // strike thrown on frame 11 
-          strikeRound11 = true;
-
-        }
-
+      pins.push(<button onClick={() => {
+        const stikeinFinalFrame = evalLastFrame(pin)
         setGame({
-          started: game.started,
+          ...game,
           roll: game.roll + 1,
-          score: [...game.score, index],
-          frame: game.frame,
-          frameScore: strikeRound11 ? 0 : index,
-          currentPlayer: game.currentPlayer
+          score: [...game.score, pin],
+          frameScore: stikeinFinalFrame ? 0 : pin,
         })
       }
-      }> {index}</button >)
+      }> {pin}</button >)
     }
-    setButtons(array);
+    setButtons(pins);
   }
 
   function startGame() {
 
-    setGame({
-      started: true,
-      roll: game.roll,
-      score: game.score,
-      frame: game.frame,
-      frameScore: game.frameScore,
-      currentPlayer: game.currentPlayer
-    })
+    setGame({ ...game, started: true, })
 
   }
 
   return (
     <>
       {buttons}
-      {/* <button onClick={() => startGame()}>StartGame</button> */}
-      <EnterName {...game} startGame={startGame} addPlayer={addPlayer} players={players} />
+      <Scoreboard {...game} startGame={startGame} addPlayer={addPlayer} players={players} />
     </>
   );
 }
