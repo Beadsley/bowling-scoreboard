@@ -35,7 +35,7 @@ function EnterName(game) {
 
     async function fetchScores() {
 
-        const response = await fetch(`/api/player/scores/${game.currentPlayer}`)
+        const response = await fetch(`/api/player/scores/${game.currentPlayer.id}`)
         const result = await response.json();
         return result;
 
@@ -43,7 +43,7 @@ function EnterName(game) {
 
     async function fetchTotalScore() {
 
-        const response = await fetch(`/api/player/total/${game.currentPlayer}`)
+        const response = await fetch(`/api/player/total/${game.currentPlayer.id}`)
         const result = await response.json();
         return result;
 
@@ -51,7 +51,7 @@ function EnterName(game) {
 
     async function fetchConsecutiveScores() {
 
-        const response = await fetch(`/api/player/consecutiveScores/${game.currentPlayer}`)
+        const response = await fetch(`/api/player/consecutiveScores/${game.currentPlayer.id}`)
         const result = await response.json();
         return result;
 
@@ -84,12 +84,12 @@ function EnterName(game) {
                 )
             }
             const total = await fetchTotalScore();
-            const {name} = game.players.find(player => player.id === game.currentPlayer);
+            const {name} = game.players.find(player => player.id === game.currentPlayer.id);
 
             array.unshift(<div className="frame frame-element name"> {name}</div>)
             array.push(<div className="frame frame-element"> {total}</div>)
-            const index = boards.findIndex(board => board.id == game.currentPlayer);
-            boards.splice(index, 1, { id: game.currentPlayer, score: array });
+            const index = boards.findIndex(board => board.id == game.currentPlayer.id);
+            boards.splice(index, 1, { id: game.currentPlayer.id, score: array });
             setBoards([...boards]);
 
         }
@@ -103,12 +103,12 @@ function EnterName(game) {
                     </div>
                 )
             }
-            const {name} = game.players.find(player => player.id === game.currentPlayer);
+            const {name} = game.players.find(player => player.id === game.currentPlayer.id);
             
             array.unshift(<div className="frame frame-element name"> {name}</div>)
             array.push(<div className="frame frame-element"> TOTAL</div>)
-            const index = boards.findIndex(board => board.id == game.currentPlayer);
-            boards.splice(index, 1, { id: game.currentPlayer, score: array });
+            const index = boards.findIndex(board => board.id == game.currentPlayer.id);
+            boards.splice(index, 1, { id: game.currentPlayer.id, score: array });
             setBoards([...boards]);
         }
         else {
