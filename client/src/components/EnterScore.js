@@ -10,10 +10,21 @@ function EnterScore() {
   useEffect(() => {
 
     if (game.started) {
+      console.log('frame', game.frame, 'prevframesscore: ', game.frameScore, 'roll: ', game.roll);
 
-      if (game.frameScore === 10 && game.roll === 1) {
+
+
+      if (game.frameScore === 10 && game.roll === 1 && game.frame < 11) {
         setGame({ started: game.started, roll: game.roll + 1, score: [10, 0], frame: game.frame, frameScore: game.frameScore, currentPlayer: game.currentPlayer })
       }
+      else if (game.frame === 11 && game.roll === 1) {
+        setGame({ started: game.started, roll: game.roll + 1, score: [game.frameScore, 0], frame: game.frame, frameScore: game.frameScore, currentPlayer: game.currentPlayer })
+
+      }
+
+      // else if(game.frame === 11 && game.frameScore!==10){ 
+      //   setGame({ started: game.started, roll: game.roll + 1, score: [game.frameScore, 0], frame: game.frame, frameScore: game.frameScore, currentPlayer: game.currentPlayer })
+      // }
       if (game.roll === 2) { addScore() }
       generateScoreButtons();
 
@@ -80,7 +91,18 @@ function EnterScore() {
     let array = [];
     for (let index = 1; index <= 10 - game.frameScore; index++) {
 
-      array.push(<button onClick={() => { setGame({ started: game.started, roll: game.roll + 1, score: [...game.score, index], frame: game.frame, frameScore: index, currentPlayer: game.currentPlayer }) }}>{index}</button>)
+      array.push(<button onClick={() => {
+        console.log("score: ", index); setGame({
+
+
+          started: game.started,
+          roll: game.roll + 1,
+          score: [...game.score, index],
+          frame: game.frame,
+          frameScore: index,
+          currentPlayer: game.currentPlayer
+        })
+      }}>{index}</button>)
     }
     setButtons(array);
   }

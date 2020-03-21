@@ -64,6 +64,7 @@ function EnterName(game) {
 
             const scores = await fetchScores();
             const consecutiveScores = await fetchConsecutiveScores();
+            console.log(scores);
 
             for (let index = 0; index <= 9; index++) {
                 let roll1 = "";
@@ -74,7 +75,7 @@ function EnterName(game) {
                     roll2 = scores[index][1]
                     consecutiveScore = consecutiveScores[index]
                 }
-
+                
                 array.push(
                     <div className="frame">
                         <div className="frame-element">{index + 1}</div>

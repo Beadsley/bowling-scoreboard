@@ -71,6 +71,7 @@ const totalBowlingScore = (rollsArray) => {
 }
 
 const checkEndOfGame = (frames, spare, strikeTotal, id) => {
+    console.log(frames, spare, strikeTotal);
 
     if (frames === 10 && !spare && strikeTotal === 0) {
         players[id].gameOver = true;
@@ -79,6 +80,9 @@ const checkEndOfGame = (frames, spare, strikeTotal, id) => {
         players[id].gameOver = true;
     }
     else if (frames === 11 && !spare && strikeTotal > 1) {
+        players[id].gameOver = true;
+    }
+    else if (frames >= 11) {
         players[id].gameOver = true;
     }
 }
