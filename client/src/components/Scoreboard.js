@@ -88,14 +88,14 @@ function EnterName(game) {
                 )
             }
 
-            board.unshift(<div className="frame frame-element name"> {player.name}</div>)
+            board.unshift(<div className="frame-element name"> {player.name}</div>)
 
             if (scores.error !== 'Game hasn\'t started yet!') {
                 const total = await fetchTotalScore(player.id);
-                board.push(<div className="frame frame-element"> {total}</div>)
+                board.push(<div className="total frame-element"> {total}</div>)
             }
             else {
-                board.push(<div className="frame frame-element"> TOTAL</div>)
+                board.push(<div className="total frame-element"> TOTAL</div>)
             }
 
             if (!game.started) {
