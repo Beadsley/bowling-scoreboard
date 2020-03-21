@@ -56,9 +56,7 @@ function EnterName(game) {
 
     }
 
-    function generateBoard() {
-
-        if (game.started) {
+    function generateBoard() {       
 
             game.players.forEach(async (player) => {
 
@@ -99,27 +97,16 @@ function EnterName(game) {
                 else {
                     board.push(<div className="frame frame-element"> TOTAL</div>)
                 }
-                const index = boards.findIndex(board => board.id === player.id);
-                boards.splice(index, 1, { id: player.id, score: board });
-                setBoards([...boards]);
-            });
 
-        }
-        else {
-            let board = [];
-            for (let index = 1; index <= 10; index++) {
-                board.push(
-                    <div className="frame">
-                        <div className="frame-element">{index}</div>
-                        {index === 10 ? <div className="roll frame-element"> <div>  </div><div>  </div> <div>  </div>  </div> : <div className="roll frame-element"><div>  </div><div>  </div></div>}
-                        <div className="frame-element">{'score'}</div>
-                    </div>
-                )
-            }
-            board.unshift(<div className="frame frame-element name"> {game.players[game.players.length - 1].name} </div>)
-            board.push(<div className="frame frame-element"> TOTAL</div>)
-            setBoards([...boards, { id: game.players[game.players.length - 1].id, score: board }]);
-        }
+                if (!game.started){
+                    setBoards([...boards, { id: game.players[game.players.length - 1].id, score: board }]);
+                }
+                else{
+                    const index = boards.findIndex(board => board.id === player.id);
+                    boards.splice(index, 1, { id: player.id, score: board });
+                    setBoards([...boards]);
+                }
+            });
 
     }
 
