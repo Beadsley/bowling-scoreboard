@@ -64,11 +64,15 @@ function EnterName(game) {
                 let board = [];
                 const scores = await fetchScores(player.id);
                 const consecutiveScores = await fetchConsecutiveScores(player.id);
+                if (game.frame === 11) {
+                    console.log(scores);
 
+                }
                 for (let index = 0; index <= 9; index++) {
                     let roll1 = "";
                     let roll2 = "";
                     let consecutiveScore = ".";
+
                     if (scores.error !== 'Game hasn\'t started yet!') {
                         if (index < scores.length) {
                             roll1 = scores[index][0]
@@ -80,7 +84,7 @@ function EnterName(game) {
                     board.push(
                         <div className="frame">
                             <div className="frame-element">{index + 1}</div>
-                            {index === 10 ? <div className="roll frame-element"> <div>  </div><div>  </div> <div>  </div>  </div> : <div className="roll frame-element"><div>{roll1}</div><div> {roll2} </div></div>}
+                            {index === 9 ? <div className="roll frame-element"> <div> {roll1} </div><div> {roll2}</div> <div>  </div>  </div> : <div className="roll frame-element"><div>{roll1}</div><div> {roll2} </div></div>}
                             <div className="frame-element">{consecutiveScore}</div>
                         </div>
                     )

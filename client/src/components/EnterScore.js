@@ -60,6 +60,7 @@ function EnterScore() {
         id: id,
         name: result[id].name,
         playing: false,
+        gameOver: false,
         frame10Strike: false,
         frame10Spare: false
       })
@@ -122,13 +123,19 @@ function EnterScore() {
 
       array.push(<button onClick={() => {
         const currentPlayerIndex = players.findIndex(player => player.id == game.currentPlayer.id);
-        if (game.frame === 10 && index === 10) {
+        if (game.frame === 10 && index === 10) { // strike on frame 10
           players[currentPlayerIndex].frame10Strike = true;
           setPlayers([...players]);
         }
+        else if (game.frame === 10 && game.score[0] + index === 10) { // spare on frame 10
+          players[currentPlayerIndex].frame10Spare = true;
+        }
+        else if (game.frame === 10 && game.roll === 1) {
+          players[currentPlayerIndex].gameOver = true;
+        }
         let strikeRound11 = false;
         if (players[currentPlayerIndex].frame10Strike === true && game.frame === 11 && index === 10) {
-          // strike thrown on frame 11
+          // strike thrown on frame 11 
           strikeRound11 = true;
 
         }
@@ -141,7 +148,8 @@ function EnterScore() {
           frameScore: strikeRound11 ? 0 : index,
           currentPlayer: game.currentPlayer
         })
-      }}>{index}</button>)
+      }
+      }> {index}</button >)
     }
     setButtons(array);
   }
