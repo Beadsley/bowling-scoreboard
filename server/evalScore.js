@@ -54,7 +54,7 @@ const addScore = (rolls, id) => {
     const totalScore = totalBowlingScore(players[id].scoresAray);
     players[id].consecutiveScoresArray.push(totalScore);
 
-    checkEndOfGame(players[id].frames, players[id].spare, players[id].strikeTotal);
+    checkEndOfGame(players[id].frames, players[id].spare, players[id].strikeTotal, id);
 
     players[id].frames += 1;
 
@@ -70,7 +70,8 @@ const totalBowlingScore = (rollsArray) => {
     return totalScore;
 }
 
-const checkEndOfGame = (frames, spare, strikeTotal) => {
+const checkEndOfGame = (frames, spare, strikeTotal, id) => {
+    console.log(frames, spare, strikeTotal);
 
     if (frames === 10 && !spare && strikeTotal === 0) {
         players[id].gameOver = true;
@@ -79,6 +80,9 @@ const checkEndOfGame = (frames, spare, strikeTotal) => {
         players[id].gameOver = true;
     }
     else if (frames === 11 && !spare && strikeTotal > 1) {
+        players[id].gameOver = true;
+    }
+    else if (frames >= 11) {
         players[id].gameOver = true;
     }
 }

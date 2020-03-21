@@ -129,8 +129,8 @@ app.put('/api/player/score/:id', (req, res) => {
     const id = req.params.id;
     const score = req.body.roll;
     const validate = validation(score, getFrames(id));
-    const exists = findPlayerByid(id);
-    console.log(req.body);
+    const exists = findPlayerByid(id);    
+    console.log(getGameOver(id));
     
     if (!exists) {
         res.status(400).send({ error: `player with id: [${id}] doesn\'t exist` });
@@ -145,7 +145,7 @@ app.put('/api/player/score/:id', (req, res) => {
     else if (!getGameOver(id) && validate !== 'valid') {
         res.status(400).send({ error: validate });
     }
-    else {
+    else {        
         res.status(400).send({ error: 'Game over' });
     }
 });
