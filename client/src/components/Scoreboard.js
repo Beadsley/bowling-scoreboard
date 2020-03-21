@@ -56,71 +56,73 @@ function EnterName(game) {
 
     }
 
-    function generateBoard() {       
+    function generateBoard() {
 
-            game.players.forEach(async (player) => {
+        game.players.forEach(async (player) => {
 
-                let board = [];
-                const scores = await fetchScores(player.id);
-                const consecutiveScores = await fetchConsecutiveScores(player.id);
+            let board = [];
+            const scores = await fetchScores(player.id);
+            const consecutiveScores = await fetchConsecutiveScores(player.id);
 
-                for (let index = 0; index <= 9; index++) {
-                    let roll1 = "";
-                    let roll2 = "";
-                    let consecutiveScore = ".";
-
-                    if (scores.error !== 'Game hasn\'t started yet!') {
-                        if (index < scores.length) {
-                            roll1 = scores[index][0]
-                            roll2 = scores[index][1]
-                            consecutiveScore = consecutiveScores[index]
-                        }
-                    }
-
-                    board.push(
-                        <div className="frame">
-                            <div className="frame-element">{index + 1}</div>
-                            {game.frame === 12 && (player.frame10Spare === true || player.frame10Strike === true) && index === 9 ? 
-                            <div className="roll frame-element"> <div> {roll1} </div><div> {scores[10][0]} </div> <div> {scores[10][1]}</div></div> : 
-                            <div className="roll frame-element"><div> {roll1} </div><div> {roll2} </div></div>}
-                            <div className="frame-element">{consecutiveScore}</div>
-                        </div>
-                    )
-                }
-
-                board.unshift(<div className="frame frame-element name"> {player.name}</div>)
+            for (let index = 0; index <= 9; index++) {
+                let roll1 = "";
+                let roll2 = "";
+                let consecutiveScore = ".";
 
                 if (scores.error !== 'Game hasn\'t started yet!') {
-                    const total = await fetchTotalScore(player.id);
-                    board.push(<div className="frame frame-element"> {total}</div>)
-                }
-                else {
-                    board.push(<div className="frame frame-element"> TOTAL</div>)
+                    if (index < scores.length) {
+                        roll1 = scores[index][0]
+                        roll2 = scores[index][1]
+                        consecutiveScore = consecutiveScores[index]
+                    }
                 }
 
-                if (!game.started){
-                    setBoards([...boards, { id: game.players[game.players.length - 1].id, score: board }]);
-                }
-                else{
-                    const index = boards.findIndex(board => board.id === player.id);
-                    boards.splice(index, 1, { id: player.id, score: board });
-                    setBoards([...boards]);
-                }
-            });
+                board.push(
+                    <div className="frame">
+                        <div className="frame-element">{index + 1}</div>
+                        {game.frame === 12 && (player.frame10Spare === true || player.frame10Strike === true) && index === 9 ?
+                            <div className="roll frame-element"> <div> {roll1} </div><div> {scores[10][0]} </div> <div> {scores[10][1]}</div></div> :
+                            <div className="roll frame-element"><div> {roll1} </div><div> {roll2} </div></div>}
+                        <div className="frame-element">{consecutiveScore}</div>
+                    </div>
+                )
+            }
+
+            board.unshift(<div className="frame frame-element name"> {player.name}</div>)
+
+            if (scores.error !== 'Game hasn\'t started yet!') {
+                const total = await fetchTotalScore(player.id);
+                board.push(<div className="frame frame-element"> {total}</div>)
+            }
+            else {
+                board.push(<div className="frame frame-element"> TOTAL</div>)
+            }
+
+            if (!game.started) {
+                setBoards([...boards, { id: game.players[game.players.length - 1].id, score: board }]);
+            }
+            else {
+                const index = boards.findIndex(board => board.id === player.id);
+                boards.splice(index, 1, { id: player.id, score: board });
+                setBoards([...boards]);
+            }
+        });
 
     }
 
     return (
         <>
-            <form style={game.started ? { display: "none" } : { display: "block" }} onSubmit={(e) => {
-                e.preventDefault();
-                createPlayer(e.target[0].value)
+            <div className="details">
+                <form className="name-input" style={game.started ? { display: "none" } : { display: "block" }} onSubmit={(e) => {
+                    e.preventDefault();
+                    createPlayer(e.target[0].value)
 
-            }}>
-                <input type="text" name="name" id="nameInput" required placeholder="Add a player..."
-                    autoComplete="off" maxlength="10 " />
-            </form>
-            <button onClick={game.players.length !== 0 ? game.startGame : () => { alert.show('add a player...') }}>Start game</button>
+                }}>
+                    <input type="text" name="name" id="nameInput" required placeholder="Add a player..."
+                        autoComplete="off" maxlength="10 " />
+                </form>
+                <button className="start-game-btn" style={game.started ? { display: "none" } : { display: "block" }} onClick={game.players.length !== 0 ? game.startGame : () => { alert.show('add a player...') }}>Start game</button>
+            </div>
             <div className="boards-container">
                 {boards.map(board => <div className="board-container">{board.score}</div>)}
             </div>
