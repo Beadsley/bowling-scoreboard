@@ -56,18 +56,15 @@ function EnterName(game) {
 
     }
 
-     function generateBoard() {
-        
+    function generateBoard() {
+
         if (game.started) {
-            console.log('called');
-            
+
             game.players.forEach(async (player) => {
-                let array = [];
-                console.log(player);
-                
+                let board = [];
                 const scores = await fetchScores(player.id);
                 const consecutiveScores = await fetchConsecutiveScores(player.id);
-                
+
                 for (let index = 0; index <= 9; index++) {
                     let roll1 = "";
                     let roll2 = "";
@@ -79,8 +76,8 @@ function EnterName(game) {
                             consecutiveScore = consecutiveScores[index]
                         }
                     }
-    
-                    array.push(
+
+                    board.push(
                         <div className="frame">
                             <div className="frame-element">{index + 1}</div>
                             {index === 10 ? <div className="roll frame-element"> <div>  </div><div>  </div> <div>  </div>  </div> : <div className="roll frame-element"><div>{roll1}</div><div> {roll2} </div></div>}
@@ -88,51 +85,26 @@ function EnterName(game) {
                         </div>
                     )
                 }
-                const total = await fetchTotalScore(player.id);
-               // const { name } = game.players.find(player => player.id === game.currentPlayer.id);
-    
-                array.unshift(<div className="frame frame-element name"> {player.name}</div>)
+
+                board.unshift(<div className="frame frame-element name"> {player.name}</div>)
+
                 if (scores.error !== 'Game hasn\'t started yet!') {
-                    array.push(<div className="frame frame-element"> {total}</div>)
+                    const total = await fetchTotalScore(player.id);
+                    board.push(<div className="frame frame-element"> {total}</div>)
                 }
                 else {
-                    array.push(<div className="frame frame-element"> TOTAL</div>)
+                    board.push(<div className="frame frame-element"> TOTAL</div>)
                 }
                 const index = boards.findIndex(board => board.id === player.id);
-                console.log(index);
-                console.log(array);
-                
-                boards.splice(index, 1, { id: player.id, score: array });
-
-                
+                boards.splice(index, 1, { id: player.id, score: board });
                 setBoards([...boards]);
             });
 
-
-
         }
-        // else if (game.frame === 1 && game.started) {
-        //     for (let index = 1; index <= 10; index++) {
-        //         array.push(
-        //             <div className="frame">
-        //                 <div className="frame-element">{index}</div>
-        //                 {index === 10 ? <div className="roll frame-element"> <div>  </div><div>  </div> <div>  </div>  </div> : <div className="roll frame-element"><div>  </div><div>  </div></div>}
-        //                 <div className="frame-element">{'score'}</div>
-        //             </div>
-        //         )
-        //     }
-        //     const { name } = game.players.find(player => player.id === game.currentPlayer.id);
-
-        //     array.unshift(<div className="frame frame-element name"> {name}</div>)
-        //     array.push(<div className="frame frame-element"> TOTAL</div>)
-        //     const index = boards.findIndex(board => board.id == game.currentPlayer.id);
-        //     boards.splice(index, 1, { id: game.currentPlayer.id, score: array });
-        //     setBoards([...boards]);
-        // }
         else {
-            let array = [];
+            let board = [];
             for (let index = 1; index <= 10; index++) {
-                array.push(
+                board.push(
                     <div className="frame">
                         <div className="frame-element">{index}</div>
                         {index === 10 ? <div className="roll frame-element"> <div>  </div><div>  </div> <div>  </div>  </div> : <div className="roll frame-element"><div>  </div><div>  </div></div>}
@@ -140,9 +112,9 @@ function EnterName(game) {
                     </div>
                 )
             }
-            array.unshift(<div className="frame frame-element name"> {game.players[game.players.length - 1].name} </div>)
-            array.push(<div className="frame frame-element"> TOTAL</div>)
-            setBoards([...boards, { id: game.players[game.players.length - 1].id, score: array }]);
+            board.unshift(<div className="frame frame-element name"> {game.players[game.players.length - 1].name} </div>)
+            board.push(<div className="frame frame-element"> TOTAL</div>)
+            setBoards([...boards, { id: game.players[game.players.length - 1].id, score: board }]);
         }
 
     }
