@@ -103,17 +103,25 @@ function EnterScore() {
     for (let index = 1; index <= 10 - game.frameScore; index++) {
 
       array.push(<button onClick={() => {
+        const currentPlayerIndex = players.findIndex(player => player.id == game.currentPlayer);
         if (game.frame === 10 && index === 10) {
-          const index = players.findIndex(player => player.id == game.currentPlayer);
-          players[index].frame10Strike = true;
+          players[currentPlayerIndex].frame10Strike = true;
           setPlayers([...players]);
         }
+        console.log('index: ', index, 'g: ', game.frameScore);
+        let strikeRound11 = false;
+        if (players[currentPlayerIndex].frame10Strike === true && game.frame === 11 && index === 10) {
+          // strike thrown on frame 11
+          strikeRound11 = true;
+
+        }
+
         setGame({
           started: game.started,
           roll: game.roll + 1,
           score: [...game.score, index],
           frame: game.frame,
-          frameScore: index,
+          frameScore: strikeRound11 ? 0 : index,
           currentPlayer: game.currentPlayer
         })
       }}>{index}</button>)
