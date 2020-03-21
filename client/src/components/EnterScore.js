@@ -10,8 +10,7 @@ function EnterScore() {
   useEffect(() => {
 
     if (game.started && game.currentPlayer !== undefined) {
-      console.log('frame', game.frame, 'prevframesscore: ', game.frameScore, 'roll: ', game.roll, game.currentPlayer);
-      console.log(players);
+      //console.log('frame', game.frame, 'prevframesscore: ', game.frameScore, 'roll: ', game.roll, game.currentPlayer);
 
       if (game.frameScore === 10 && game.roll === 1 && game.frame < 11) {
         // strike
@@ -45,7 +44,8 @@ function EnterScore() {
 
   useEffect(() => {
     if (game.started) {
-      fetchPlayers();
+      selectPlayer()
+      //fetchPlayers();
     }
 
   }, [game.started])
@@ -68,6 +68,24 @@ function EnterScore() {
     setGame({ started: game.started, roll: game.roll, score: game.score, frame: game.frame, frameScore: game.frameScore, currentPlayer: playersArray[0].id })
 
   }
+
+  //selects the first player
+  function selectPlayer() {
+    setGame({ started: game.started, roll: game.roll, score: game.score, frame: game.frame, frameScore: game.frameScore, currentPlayer: players[0].id })
+    
+  }
+
+  function addPlayer(id, name) {
+    const player = {
+      id,
+      name,
+      playing: false,
+      frame10Strike: false,
+      frame10Spare: false
+    }
+    setPlayers([...players, player])
+  }
+
 
   async function addScore() {
 
@@ -108,7 +126,6 @@ function EnterScore() {
           players[currentPlayerIndex].frame10Strike = true;
           setPlayers([...players]);
         }
-        console.log('index: ', index, 'g: ', game.frameScore);
         let strikeRound11 = false;
         if (players[currentPlayerIndex].frame10Strike === true && game.frame === 11 && index === 10) {
           // strike thrown on frame 11
@@ -146,7 +163,7 @@ function EnterScore() {
     <>
       {buttons}
       {/* <button onClick={() => startGame()}>StartGame</button> */}
-      <EnterName {...game} startGame={startGame} />
+      <EnterName {...game} startGame={startGame} addPlayer={addPlayer} players={players}/>
     </>
   );
 }

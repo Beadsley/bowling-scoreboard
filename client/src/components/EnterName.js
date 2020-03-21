@@ -5,19 +5,20 @@ import '../styles/App.css';
 function EnterName(game) {
 
     const alert = useAlert()
+    console.log(game.players);  
+    
 
-    const [player, setPlayer] = useState();
     const [boards, setBoards] = useState([]);
 
     useEffect(() => {
 
-        if (player) {
+        if (game.players.length!==0) {
 
             generateBoard();
         }
-    }, [player, game.currentPlayer, game.frame]);
+    }, [game.players, game.currentPlayer, game.frame]);
 
-    async function addPlayer(name) {
+    async function createPlayer(name) {
 
         const response = await fetch('/api/player/', {
             method: 'post',
@@ -29,9 +30,7 @@ function EnterName(game) {
             })
         })
         const { id } = await response.json();
-        setPlayer({ id, name })
-
-
+        game.addPlayer(id, name)
     }
 
     async function fetchScores() {
@@ -85,8 +84,9 @@ function EnterName(game) {
                 )
             }
             const total = await fetchTotalScore();
+            const {name} = game.players.find(player => player.id === game.currentPlayer);
 
-            array.unshift(<div className="frame frame-element name"> {player.name}</div>)
+            array.unshift(<div className="frame frame-element name"> {name}</div>)
             array.push(<div className="frame frame-element"> {total}</div>)
             const index = boards.findIndex(board => board.id == game.currentPlayer);
             boards.splice(index, 1, { id: game.currentPlayer, score: array });
@@ -103,7 +103,9 @@ function EnterName(game) {
                     </div>
                 )
             }
-            array.unshift(<div className="frame frame-element name"> {player.name}</div>)
+            const {name} = game.players.find(player => player.id === game.currentPlayer);
+            
+            array.unshift(<div className="frame frame-element name"> {name}</div>)
             array.push(<div className="frame frame-element"> TOTAL</div>)
             const index = boards.findIndex(board => board.id == game.currentPlayer);
             boards.splice(index, 1, { id: game.currentPlayer, score: array });
@@ -119,9 +121,9 @@ function EnterName(game) {
                     </div>
                 )
             }
-            array.unshift(<div className="frame frame-element name"> {player.name}</div>)
+            array.unshift(<div className="frame frame-element name"> {game.players[game.players.length-1].name} </div>)
             array.push(<div className="frame frame-element"> TOTAL</div>)
-            setBoards([...boards, { id: player.id, score: array }]);
+            setBoards([...boards, { id: game.players[game.players.length-1].id, score: array }]);
         }
 
     }
@@ -130,13 +132,13 @@ function EnterName(game) {
         <>
             <form style={game.started ? { display: "none" } : { display: "block" }} onSubmit={(e) => {
                 e.preventDefault();
-                addPlayer(e.target[0].value)
+                createPlayer(e.target[0].value)
 
             }}>
                 <input type="text" name="name" id="nameInput" required placeholder="Add a player..."
                     autoComplete="off" maxlength="10 " />
             </form>
-            <button onClick={player ? game.startGame : () => { alert.show('add a player...') }}>Start game</button>
+            <button onClick={game.players.length!==0 ? game.startGame : () => { alert.show('add a player...') }}>Start game</button>
             <div className="boards-container">
                 {boards.map(board => <div className="board-container">{board.score}</div>)}
             </div>
