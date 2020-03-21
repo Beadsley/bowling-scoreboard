@@ -13,6 +13,11 @@
   grid-gap: 15px;
 }
 
+.interactivity{
+  display: grid;
+  min-height: 30px;
+  height: 30px;
+}
 .frame-element {
   border: 1px solid black;
   margin: 0px;

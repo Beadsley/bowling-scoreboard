@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Scoreboard from './Scoreboard';
+import Input from './Input';
 
-function EnterScore() {
+function Score() {
 
   const [buttons, setButtons] = useState([]);
   const [game, setGame] = useState({ started: false, roll: 0, score: [], frame: 1, frameScore: 0, currentPlayer: undefined });
@@ -144,10 +145,13 @@ function EnterScore() {
 
   return (
     <>
-      {buttons}
-      <Scoreboard {...game} startGame={startGame} addPlayer={addPlayer} players={players} />
+      <div className=".interactivity">
+        {buttons}
+        <Input {...game} startGame={startGame} addPlayer={addPlayer} players={players} />
+      </div>
+      <Scoreboard {...game} players={players} />
     </>
   );
 }
 
-export default EnterScore;
+export default Score;
