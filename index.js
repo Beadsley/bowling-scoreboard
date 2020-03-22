@@ -6,7 +6,7 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 8080
 
-const routes = require('./routes/api.js')
+const routes = require('./server/routes/api.js')
 
 
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/scoreboard', {
