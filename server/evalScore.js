@@ -1,3 +1,5 @@
+const Scoreboard = require('./models/scoreboard');
+
 let players = {
 
 }
@@ -23,6 +25,8 @@ const addPlayer = (name, id) => {
 }
 
 const addScore = (rolls, id) => {
+
+    
 
     if (players[id].strikeTotal >= 2) {
         const index = players[id].scoresAray.length - 2;
@@ -60,6 +64,25 @@ const addScore = (rolls, id) => {
 
     return players[id].scoresAray;
 }
+
+const updateUser = (id, roll) => {
+
+
+    const myquery = { _id: new mongodb.ObjectID(id) };
+
+    Scoreboard.updateOne(myquery
+        , { $set: obj }, function (err, result) {
+            if (err) {
+                console.log(err);
+            }
+            else {
+                console.log(`Updates with ${obj}`);
+                console.log(result);
+            }
+        });
+}
+    
+
 
 const totalBowlingScore = (rollsArray) => {
 

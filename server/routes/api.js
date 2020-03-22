@@ -3,6 +3,7 @@ const router = express.Router();
 const { addScore, gameRestart, getTotalScore, getFrames, getScores, getConsecutiveScores, getGameOver, addPlayer, findPlayerByid, players } = require('../evalScore.js');
 const uuid = require('uuid').v1;
 const Scoreboard = require('../models/scoreboard');
+const { getDocument } = require('../models/dbHelper.js');
 
 //test route for db all platers
 router.get('/', (req, res) => {
@@ -91,17 +92,16 @@ router.delete('/game', (req, res) => {
 });
 
 
-router.get('/player/:id', (req, res) => {
+router.get('/player/:id', async (req, res) => {
     const id = req.params.id;
-    Scoreboard.findById(id, function (err, data) {
-        if (err) {
-            res.status(400).send({ message: `Player with id: ${id} not found` });
-        }
-        else {
-            res.status(200).json({ data });
+    try {
+        const player = await getDocument(id);
+        res.json(player);
+    }
+    catch (err) {
+        res.status(400).send({ error: `player with id: [${id}] doesn\'t exist` });
+    }
 
-        }
-    })
 })
 
 /**
