@@ -1,5 +1,5 @@
 const Scoreboard = require('./scoreboard');
-
+const mongodb = require('mongodb');
 
 const getDocument = (id) => {
 
@@ -48,6 +48,22 @@ const insertDocument = function (name) {
 };
 
 
+const updateDocument = function (id, obj) {
+    return new Promise((resolve, reject) => {
+
+        const myquery = { _id: new mongodb.ObjectID(id) };
+
+        Scoreboard.updateOne(myquery
+            , { $set: obj }, function (err, result) {
+                if (err) {
+                    reject(err);
+                }
+                else {
+                    resolve(result);
+                }
+            });
+    })
+};
 const removeAll = function () {
 
     return new Promise((resolve, reject) => {
@@ -68,5 +84,6 @@ const removeAll = function () {
 module.exports = {
     getDocument,
     insertDocument,
+    updateDocument,
     removeAll
 }

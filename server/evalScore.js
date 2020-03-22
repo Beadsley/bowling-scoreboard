@@ -1,68 +1,46 @@
-const Scoreboard = require('./models/scoreboard');
+const { getDocument, updateDocument, removeAll, insertDocument } = require('./models/dbHelper.js');
 
-let players = {
+const addScore = async (rolls, id) => {
 
-}
-
-const gameRestart = () => {
-    players = {
-
+    let player = await getDocument(id);
+    console.log('before ', player);
+    player.body.strikeTotal
+    if (player.body.strikeTotal >= 2) {
+        const index = player.body.scoresAray.length - 2;
+        player.body.scoresAray.splice(index, 1, [30]);
     }
-
-}
-
-const addPlayer = (name, id) => {
-    players[id] = {
-        name: name,
-        scoresAray: [],
-        consecutiveScoresArray: [],
-        spare: false,
-        strikeTotal: 0,
-        frames: 1,
-        gameOver: false,
-        totalScore: 0
-    }
-}
-
-const addScore = (rolls, id) => {
-
-    
-
-    if (players[id].strikeTotal >= 2) {
-        const index = players[id].scoresAray.length - 2;
-        players[id].scoresAray.splice(index, 1, [30]);
-    }
-    else if (players[id].strikeTotal === 1) {
-        const index = players[id].scoresAray.length - 1;
+    else if (player.body.strikeTotal === 1) {
+        const index = player.body.scoresAray.length - 1;
         const result = rolls[0] + rolls[1] + 10;
-        players[id].scoresAray.splice(index, 1, [result]);
+        player.body.scoresAray.splice(index, 1, [result]);
     }
-    else if (players[id].spare === true) {
-        const index = players[id].scoresAray.length - 1;
+    else if (player.body.spare === true) {
+        const index = player.body.scoresAray.length - 1;
         const result = rolls[0] + 10;
-        players[id].scoresAray.splice(index, 1, [result]);
-        players[id].spare = false;
+        player.body.scoresAray.splice(index, 1, [result]);
+        player.body.spare = false;
     }
 
     if (rolls[0] === 10) {
-        players[id].strikeTotal += 1;
+        player.body.strikeTotal += 1;
     }
     else if (rolls[0] + rolls[1] === 10) {
-        players[id].spare = true;
+        player.body.spare = true;
     }
     else {
-        players[id].strikeTotal = 0;
+        player.body.strikeTotal = 0;
     }
 
-    players[id].scoresAray.push(rolls);
-    const totalScore = totalBowlingScore(players[id].scoresAray);
-    players[id].consecutiveScoresArray.push(totalScore);
+    player.body.scoresAray.push(rolls);
+    const totalScore = totalBowlingScore(player.body.scoresAray);
+    player.body.consecutiveScoresArray.push(totalScore);
 
-    checkEndOfGame(players[id].frames, players[id].spare, players[id].strikeTotal, id);
+    //checkEndOfGame(players[id].frames, players[id].spare, players[id].strikeTotal, id);
 
-    players[id].frames += 1;
-
-    return players[id].scoresAray;
+    player.body.frames += 1;
+    console.log('after ', player);
+    await updateDocument(id, player);
+    //return players[id].scoresAray;
 }
 
 const updateUser = (id, roll) => {
@@ -81,7 +59,7 @@ const updateUser = (id, roll) => {
             }
         });
 }
-    
+
 
 
 const totalBowlingScore = (rollsArray) => {
@@ -144,14 +122,11 @@ const getGameOver = (id) => {
 
 module.exports = {
     addScore,
-    gameRestart,
     getTotalScore,
     getFrames,
     getScores,
     getConsecutiveScores,
     getGameOver,
-    addPlayer,
     findPlayerByid,
-    players
 };
 

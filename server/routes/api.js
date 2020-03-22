@@ -148,26 +148,29 @@ router.put('/player/score/:id', (req, res) => {
     // !TODO introduce players
     const id = req.params.id;
     const score = req.body.roll;
-    const validate = validation(score, getFrames(id));
-    const exists = findPlayerByid(id);
-    console.log(getGameOver(id));
+    addScore(score, id);
 
-    if (!exists) {
-        res.status(400).send({ error: `player with id: [${id}] doesn\'t exist` });
-    }
-    else if (score === undefined) {
-        res.status(400).send({ error: `request body must contain {roll: [roll_1, roll_2]}` });
-    }
-    else if (!getGameOver(id) && validate === 'valid') {
-        addScore(score, id);
-        res.status(200).json({ frame: getFrames(id) - 1, score: score });
-    }
-    else if (!getGameOver(id) && validate !== 'valid') {
-        res.status(400).send({ error: validate });
-    }
-    else {
-        res.status(400).send({ error: 'Game over' });
-    }
+    
+    // const validate = validation(score, getFrames(id));
+    // const exists = findPlayerByid(id);
+    // console.log(getGameOver(id));
+
+    // if (!exists) {
+    //     res.status(400).send({ error: `player with id: [${id}] doesn\'t exist` });
+    // }
+    // else if (score === undefined) {
+    //     res.status(400).send({ error: `request body must contain {roll: [roll_1, roll_2]}` });
+    // }
+    // else if (!getGameOver(id) && validate === 'valid') {
+    //     addScore(score, id);
+    //     res.status(200).json({ frame: getFrames(id) - 1, score: score });
+    // }
+    // else if (!getGameOver(id) && validate !== 'valid') {
+    //     res.status(400).send({ error: validate });
+    // }
+    // else {
+    //     res.status(400).send({ error: 'Game over' });
+    // }
 });
 
 const validation = (scores, _frame) => {
