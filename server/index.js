@@ -1,6 +1,5 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const morgan = require('morgan')
 const mongoose = require('mongoose');
 require('dotenv').config();
 
@@ -20,7 +19,6 @@ mongoose.connection.on('connected', () => {
 })
 mongoose.connection.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
-app.use(morgan('tiny'))
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use('/api', routes);
