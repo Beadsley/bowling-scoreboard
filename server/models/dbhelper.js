@@ -40,8 +40,8 @@ const insertDocument = function (name) {
         const data = {
             body: {
                 name: name,
-                scoresAray: [],
-                consecutiveScoresArray: [],
+                scores: [],
+                consecutiveScores: [],
                 spare: false,
                 strikeTotal: 0,
                 frames: 1,

@@ -77,7 +77,8 @@ function Score() {
         "roll": game.score
       })
     })
-    //console.log(await response.json());
+    const result = await response.json()
+    console.log(result);
 
     selectNextPlayer();
 

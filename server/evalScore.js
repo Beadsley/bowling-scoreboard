@@ -2,18 +2,18 @@ const addScore = async (rolls, id, player) => {
 
 
     if (player.body.strikeTotal >= 2) {
-        const index = player.body.scoresAray.length - 2;
-        player.body.scoresAray.splice(index, 1, [30]);
+        const index = player.body.scores.length - 2;
+        player.body.scores.splice(index, 1, [30]);
     }
     else if (player.body.strikeTotal === 1) {
-        const index = player.body.scoresAray.length - 1;
+        const index = player.body.scores.length - 1;
         const result = rolls[0] + rolls[1] + 10;
-        player.body.scoresAray.splice(index, 1, [result]);
+        player.body.scores.splice(index, 1, [result]);
     }
     else if (player.body.spare === true) {
-        const index = player.body.scoresAray.length - 1;
+        const index = player.body.scores.length - 1;
         const result = rolls[0] + 10;
-        player.body.scoresAray.splice(index, 1, [result]);
+        player.body.scores.splice(index, 1, [result]);
         player.body.spare = false;
     }
 
@@ -26,10 +26,11 @@ const addScore = async (rolls, id, player) => {
     else {
         player.body.strikeTotal = 0;
     }
-
-    player.body.scoresAray.push(rolls);
-    const totalScore = totalBowlingScore(player.body.scoresAray);
-    player.body.consecutiveScoresArray.push(totalScore);
+    console.log('rolls', rolls);
+    
+    player.body.scores.push(rolls);
+    const totalScore = totalBowlingScore(player.body.scores);
+    player.body.consecutiveScores.push(totalScore);
     player.body.totalScore = totalScore;
 
     player = checkEndOfGame(player);

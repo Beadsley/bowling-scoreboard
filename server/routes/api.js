@@ -86,9 +86,12 @@ router.put('/player/score/:id', async (req, res) => {
 
     const id = req.params.id;
     const score = req.body.roll;
-
+    console.log(id, score);
+    
     try {
         let player = await getDocument(id);
+        console.log(player);
+        
         const { frames, gameOver } = player.body;
         const valid = validation(score, frames);
         if (valid && !gameOver) {
@@ -102,6 +105,7 @@ router.put('/player/score/:id', async (req, res) => {
 
     }
     catch (err) {
+        console.log(err);
         
         if (err.kind === "ObjectId") {
             res.status(400).send({ error: `player with id: [${id}] doesn\'t exist` });

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAlert } from 'react-alert'
 
-function Input(game){
+function Input(game) {
 
     const alert = useAlert()
 
@@ -16,8 +16,8 @@ function Input(game){
                 name: name
             })
         })
-        const { id } = await response.json();
-        game.addPlayer(id, name)
+        const { _id } = await response.json();
+        game.addPlayer(_id, name)
     }
 
     return (

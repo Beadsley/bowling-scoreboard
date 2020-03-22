@@ -10,46 +10,34 @@ function EnterName(game) {
     const [boards, setBoards] = useState([]);
 
     useEffect(() => {
-
+        
         if (game.players.length !== 0) {
+            console.log(game.players);
 
             generateBoard();
         }
     }, [game.players, game.currentPlayer]);
 
 
-    async function fetchScores(id) {
+    async function fetchPlayer(id) {
 
-        const response = await fetch(`/api/player/scores/${id}`)
+        const response = await fetch(`/api/player/${id}`)
         const result = await response.json();
         return result;
 
     }
 
-    async function fetchTotalScore(id) {
-
-        const response = await fetch(`/api/player/total/${id}`)
-        const result = await response.json();
-        return result;
-
-    }
-
-    async function fetchConsecutiveScores(id) {
-
-        const response = await fetch(`/api/player/consecutiveScores/${id}`)
-        const result = await response.json();
-        return result;
-
-    }
 
     function generateBoard() {
 
         game.players.forEach(async (player) => {
-
+            
             let board = [];
-            const scores = await fetchScores(player.id);
-            const consecutiveScores = await fetchConsecutiveScores(player.id);
-
+            
+            const result = await fetchPlayer(player.id);
+            const {_id} = result;            
+            const {scores, consecutiveScores, totalScore, name} = result.body;
+            
             for (let index = 0; index <= 9; index++) {
                 let roll1 = "";
                 let roll2 = "";
@@ -73,19 +61,20 @@ function EnterName(game) {
                     </div>
                 )
             }
-
-            board.unshift(<div className="frame-element name"> {player.name}</div>)
+            console.log(player.name);
+            
+            
+            board.unshift(<div className="frame-element name"> {name}</div>)
 
             if (scores.error !== 'Game hasn\'t started yet!') {
-                const total = await fetchTotalScore(player.id);
-                board.push(<div className="total frame-element"> {total}</div>)
+                board.push(<div className="total frame-element"> {totalScore}</div>)
             }
             else {
                 board.push(<div className="total frame-element"> TOTAL</div>)
             }
 
             if (!game.started) {
-                setBoards([...boards, { id: game.players[game.players.length - 1].id, score: board }]);
+                setBoards([...boards, { id: _id, score: board }]);
             }
             else {
                 const index = boards.findIndex(board => board.id === player.id);
