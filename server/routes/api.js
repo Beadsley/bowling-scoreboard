@@ -3,7 +3,7 @@ const router = express.Router();
 const { addScore, gameRestart, getTotalScore, getFrames, getScores, getConsecutiveScores, getGameOver, addPlayer, findPlayerByid, players } = require('../evalScore.js');
 const uuid = require('uuid').v1;
 const Scoreboard = require('../models/scoreboard');
-const { getDocument, removeAll, insertDocument } = require('../models/dbHelper.js');
+const { getDocument, removeAll, insertDocument, updateDocument } = require('../models/dbHelper.js');
 
 //test route for db all platers
 router.get('/', (req, res) => {
@@ -114,8 +114,8 @@ router.get('/player/:id', async (req, res) => {
 router.post('/player', async (req, res) => {
 
     const name = req.body.name;
-    
-    if(name===undefined){
+
+    if (name === undefined) {
         res.status(400).send({ error: `must be in the format {name:'charlie'}` });
     }
 
@@ -144,53 +144,54 @@ router.get('/players', (req, res) => {
  *  }
  * 
  */
-router.put('/player/score/:id', (req, res) => {
+router.put('/player/score/:id', async (req, res) => {
     // !TODO introduce players
     const id = req.params.id;
     const score = req.body.roll;
-    addScore(score, id);
+    try {
+        let player = await getDocument(id);
+        const { frames, gameOver } = player.body;
+        const valid = validation(score, frames, res);
+        if (valid && !gameOver){
+            const updatedPlayer = await addScore(score, id, player);
+            await updateDocument(id, updatedPlayer);
+            res.json(updatedPlayer);
+        }
+        else {
+            res.status(400).send({ error: 'Game over' });
+        }
 
-    
-    // const validate = validation(score, getFrames(id));
-    // const exists = findPlayerByid(id);
-    // console.log(getGameOver(id));
-
-    // if (!exists) {
-    //     res.status(400).send({ error: `player with id: [${id}] doesn\'t exist` });
-    // }
-    // else if (score === undefined) {
-    //     res.status(400).send({ error: `request body must contain {roll: [roll_1, roll_2]}` });
-    // }
-    // else if (!getGameOver(id) && validate === 'valid') {
-    //     addScore(score, id);
-    //     res.status(200).json({ frame: getFrames(id) - 1, score: score });
-    // }
-    // else if (!getGameOver(id) && validate !== 'valid') {
-    //     res.status(400).send({ error: validate });
-    // }
-    // else {
-    //     res.status(400).send({ error: 'Game over' });
-    // }
+    }
+    catch (err) {
+        if (err.kind === "ObjectId") {
+            res.status(400).send({ error: `player with id: [${id}] doesn\'t exist` });
+        }
+        res.status(400).send({ error: err });
+    }
 });
 
-const validation = (scores, _frame) => {
+// perhaps throw an error instead
+const validation = (scores, _frame, res) => {
     if (!Array.isArray(scores)) {
-        return 'must be of type array';
+        res.status(400).send({ error: `request body must contain {roll: [roll_1, roll_2]}` });
     }
     else if (scores.length !== 2) {
-        return 'array should contain 2 arguments';
+        res.status(400).send({ error: 'array should contain 2 arguments' });
+
     }
     else if ((typeof scores[0] !== 'number') || (typeof scores[1] !== 'number')) {
-        return 'array should only contain numbers';
+        res.status(400).send({ error: 'array should only contain numbers' });
+        
     }
     else if (scores[0] + scores[1] > 10 && _frame < 11) {
-        return 'frame total shouldn\'t be higher than 10';
+        res.status(400).send({ error: 'frame total shouldn\'t be higher than 10' });
+        
     }
     else if (scores[0] + scores[1] > 20 && _frame === 11) {
-        return 'frame total shouldn\'t be higher than 20';
+        res.status(400).send({ error: 'frame total shouldn\'t be higher than 20' })
     }
     else {
-        return 'valid';
+        return true;
     }
 }
 

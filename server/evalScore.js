@@ -1,8 +1,8 @@
 const { getDocument, updateDocument, removeAll, insertDocument } = require('./models/dbHelper.js');
 
-const addScore = async (rolls, id) => {
+const addScore = async (rolls, id, player) => {
 
-    let player = await getDocument(id);
+    
     console.log('before ', player);
     player.body.strikeTotal
     if (player.body.strikeTotal >= 2) {
@@ -39,25 +39,8 @@ const addScore = async (rolls, id) => {
 
     player.body.frames += 1;
     console.log('after ', player);
-    await updateDocument(id, player);
+    return player;
     //return players[id].scoresAray;
-}
-
-const updateUser = (id, roll) => {
-
-
-    const myquery = { _id: new mongodb.ObjectID(id) };
-
-    Scoreboard.updateOne(myquery
-        , { $set: obj }, function (err, result) {
-            if (err) {
-                console.log(err);
-            }
-            else {
-                console.log(`Updates with ${obj}`);
-                console.log(result);
-            }
-        });
 }
 
 
