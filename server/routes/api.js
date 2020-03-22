@@ -3,7 +3,7 @@ const router = express.Router();
 const { addScore, gameRestart, getTotalScore, getFrames, getScores, getConsecutiveScores, getGameOver, addPlayer, findPlayerByid, players } = require('../evalScore.js');
 const uuid = require('uuid').v1;
 const Scoreboard = require('../models/scoreboard');
-const { getDocument } = require('../models/dbHelper.js');
+const { getDocument, removeAll } = require('../models/dbHelper.js');
 
 //test route for db all platers
 router.get('/', (req, res) => {
@@ -77,17 +77,16 @@ router.get('/player/total/:id', (req, res) => {
 /**
  * restarts the game and deletes all scores
  */
-router.delete('/game', (req, res) => {
-    Scoreboard.deleteMany({}, function (err, result) {
-        if (!err) {
-            console.log("Removed everything");
-            res.status(204).end();
-        }
-        else {
-            res.status(400).send({ message: error.message });
-        }
+router.delete('/game', async (req, res) => {
 
-    });
+    try {
+        await removeAll()
+        res.status(204).end();
+    }
+    catch (err) {
+        res.status(400).send({ message: err }); //maybe not 400
+    }
+
     //gameRestart();
 });
 
