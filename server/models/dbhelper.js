@@ -17,6 +17,22 @@ const getDocument = (id) => {
     })
 };
 
+const getDocuments = () => {
+
+    return new Promise((resolve, reject) => {
+
+        Scoreboard.find({}, function (err, data) {
+            if (err) {
+                reject(err);
+            }
+            else {
+                resolve(data);
+
+            }
+        })
+    })
+};
+
 const insertDocument = function (name) {
 
     return new Promise((resolve, reject) => {
@@ -49,7 +65,7 @@ const insertDocument = function (name) {
 
 
 const updateDocument = function (id, obj) {
-    
+
     return new Promise((resolve, reject) => {
 
         const myquery = { _id: new mongodb.ObjectID(id) };
@@ -84,6 +100,7 @@ const removeAll = function () {
 
 module.exports = {
     getDocument,
+    getDocuments,
     insertDocument,
     updateDocument,
     removeAll

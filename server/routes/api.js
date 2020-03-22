@@ -1,15 +1,18 @@
 const express = require('express');
 const router = express.Router();
 const { addScore } = require('../evalScore.js');
-const Scoreboard = require('../models/scoreboard');
-const { getDocument, removeAll, insertDocument, updateDocument } = require('../models/dbHelper.js');
+const { getDocument, getDocuments, removeAll, insertDocument, updateDocument } = require('../models/dbHelper.js');
 
 //test route for db all platers
-router.get('/players', (req, res) => {
-    Scoreboard.find({}).then(data => {
-        res.status(200).json(data);
+router.get('/players', async(req, res) => {
 
-    })
+    try {
+        const players = await getDocuments()
+        res.status(200).json(players);
+    }
+    catch (err) {
+        res.status(400).send({ message: err }); //maybe not 400
+    }
 });
 
 
@@ -83,11 +86,11 @@ router.put('/player/score/:id', async (req, res) => {
 
     const id = req.params.id;
     const score = req.body.roll;
-    
+
     try {
         let player = await getDocument(id);
         const { frames, gameOver } = player.body;
-        const valid = validation(score, frames, res);
+        const valid = validation(score, frames);
         if (valid && !gameOver) {
             const updatedPlayer = await addScore(score, id, player);
             await updateDocument(id, updatedPlayer);
@@ -108,7 +111,7 @@ router.put('/player/score/:id', async (req, res) => {
     }
 });
 
-const validation = (scores, _frame, res) => {
+const validation = (scores, _frame) => {
     if (!Array.isArray(scores)) {
         throw new Error('`request body must contain {roll: [roll_1, roll_2]}`');        
     }
