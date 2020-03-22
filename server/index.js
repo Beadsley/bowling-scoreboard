@@ -2,23 +2,92 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const uuid = require('uuid').v1;
 const morgan = require('morgan')
+const mongoose = require('mongoose');
+require('dotenv').config()
 const { addScore, gameRestart, getTotalScore, getFrames, getScores, getConsecutiveScores, getGameOver, addPlayer, findPlayerByid, players } = require('./evalScore.js');
 
 const app = express();
+const PORT = process.env.PORT || 8080
+
+// 
+
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/scoreboard', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+});
+mongoose.connection.on('connected', () => {
+    console.log('mongoose connected');
+    
+
+})
+
+// SCHEMA
+
+const Schema = mongoose.Schema;
+const ScoreboardSchema = new Schema({
+    title: String,
+    body: Object,
+    date: {
+        type: String,
+        default: Date.now()
+    }
+})
+
+// Model
+
+const Scoreboard = mongoose.model('Scoreboard', ScoreboardSchema);
+
+
+// save data to db
+
+const data = {
+    title: "test",
+    body: {
+        name: 'dan',
+        scoresAray: [],
+        consecutiveScoresArray: [],
+        spare: false,
+        strikeTotal: 0,
+        frames: 1,
+        gameOver: false,
+        totalScore: 0
+    }
+
+}
+
+// const scoreboard = new Scoreboard(data);
+
+// scoreboard.save((error) => {
+//     if (error) {
+//         console.log(`Error: ${error.message}`);
+
+//     } else {
+//         console.log('data saved');
+
+//     }
+// })
+
+
 
 app.use(morgan('tiny'))
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-const PORT = process.env.PORT || 8080
 console.log(PORT);
 
 app.listen(PORT, () => {
-
+    
     console.log(`running om port: ${PORT}`);
 
 });
 
+//test route for db
+app.get('/api', (req, res) => {
+    Scoreboard.find({}).then(data => {
+        res.status(200).json(data);
+
+    })
+});
 /**
  * gets the scores of each frame played
  * player id needs to be specified
@@ -102,7 +171,7 @@ app.post('/api/player', (req, res) => {
 
     const name = req.body.name;
     console.log(req.body);
-    
+
     const id = uuid();
     addPlayer(name, id);
     res.status(200).json({ id: id, name: name });
@@ -129,9 +198,9 @@ app.put('/api/player/score/:id', (req, res) => {
     const id = req.params.id;
     const score = req.body.roll;
     const validate = validation(score, getFrames(id));
-    const exists = findPlayerByid(id);    
+    const exists = findPlayerByid(id);
     console.log(getGameOver(id));
-    
+
     if (!exists) {
         res.status(400).send({ error: `player with id: [${id}] doesn\'t exist` });
     }
@@ -145,7 +214,7 @@ app.put('/api/player/score/:id', (req, res) => {
     else if (!getGameOver(id) && validate !== 'valid') {
         res.status(400).send({ error: validate });
     }
-    else {        
+    else {
         res.status(400).send({ error: 'Game over' });
     }
 });
