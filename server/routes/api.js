@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { addScore, gameRestart, getTotalScore, getFrames, getScores, getConsecutiveScores, getGameOver, addPlayer, findPlayerByid, players } = require('../evalScore.js');
 const uuid = require('uuid').v1;
-const Scoreboard =require('../models/scoreboard');
+const Scoreboard = require('../models/scoreboard');
 
 //test route for db
 router.get('/', (req, res) => {
@@ -95,9 +95,33 @@ router.post('/player', (req, res) => {
     const name = req.body.name;
     console.log(req.body);
 
-    const id = uuid();
-    addPlayer(name, id);
-    res.status(200).json({ id: id, name: name });
+    const data = {
+        body: {
+            name: name,
+            scoresAray: [],
+            consecutiveScoresArray: [],
+            spare: false,
+            strikeTotal: 0,
+            frames: 1,
+            gameOver: false,
+            totalScore: 0
+        }
+    }
+    const scoreboard = new Scoreboard(data);
+    scoreboard.save((error, result) => {
+        if (error) {
+            console.log(`Error: ${error.message}`);
+
+        } else {
+            console.log('data saved', result);
+            res.status(200).json({ result });
+
+
+        }
+    })
+
+    // const id = uuid();
+    // addPlayer(name, id);
 
 });
 
