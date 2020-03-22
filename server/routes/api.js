@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { addScore } = require('../evalScore.js');
-const { getDocument, getDocuments, removeAll, insertDocument, updateDocument } = require('../models/dbHelper.js');
+const { getDocument, getDocuments, removeAll, insertDocument, updateDocument } = require('../models/dbhelper.js');
 
 
 router.get('/players', async(req, res) => {
