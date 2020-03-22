@@ -1,8 +1,6 @@
 const addScore = async (rolls, id, player) => {
 
 
-    console.log('before ', player);
-    player.body.strikeTotal
     if (player.body.strikeTotal >= 2) {
         const index = player.body.scoresAray.length - 2;
         player.body.scoresAray.splice(index, 1, [30]);
@@ -37,7 +35,6 @@ const addScore = async (rolls, id, player) => {
     player = checkEndOfGame(player);
 
     player.body.frames += 1;
-    console.log('after ', player);
     return player;
 }
 
@@ -52,7 +49,6 @@ const totalBowlingScore = (rollsArray) => {
 
 const checkEndOfGame = (player) => {
     const { frames, spare, strikeTotal } = player.body
-    console.log(frames, spare, strikeTotal);
 
     if (frames === 10 && !spare && strikeTotal === 0) {
         player.body.gameOver = true;

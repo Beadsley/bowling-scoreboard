@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { addScore} = require('../evalScore.js');
+const { addScore } = require('../evalScore.js');
 const Scoreboard = require('../models/scoreboard');
 const { getDocument, removeAll, insertDocument, updateDocument } = require('../models/dbHelper.js');
 
@@ -80,14 +80,15 @@ router.post('/player', async (req, res) => {
  * 
  */
 router.put('/player/score/:id', async (req, res) => {
-    // !TODO introduce players
+
     const id = req.params.id;
     const score = req.body.roll;
+    
     try {
         let player = await getDocument(id);
         const { frames, gameOver } = player.body;
         const valid = validation(score, frames, res);
-        if (valid && !gameOver){
+        if (valid && !gameOver) {
             const updatedPlayer = await addScore(score, id, player);
             await updateDocument(id, updatedPlayer);
             res.json(updatedPlayer);
@@ -98,34 +99,30 @@ router.put('/player/score/:id', async (req, res) => {
 
     }
     catch (err) {
+        
         if (err.kind === "ObjectId") {
             res.status(400).send({ error: `player with id: [${id}] doesn\'t exist` });
         } else {
-            res.status(400).send({ error: err });
-
+            res.status(400).send({ error: err.message });
         }
     }
 });
 
-// perhaps throw an error instead
 const validation = (scores, _frame, res) => {
     if (!Array.isArray(scores)) {
-        res.status(400).send({ error: `request body must contain {roll: [roll_1, roll_2]}` });
+        throw new Error('`request body must contain {roll: [roll_1, roll_2]}`');        
     }
     else if (scores.length !== 2) {
-        res.status(400).send({ error: 'array should contain 2 arguments' });
-
+        throw new Error('array should contain 2 arguments');
     }
     else if ((typeof scores[0] !== 'number') || (typeof scores[1] !== 'number')) {
-        res.status(400).send({ error: 'array should only contain numbers' });
-        
+        throw new Error('array should only contain numbers');
     }
     else if (scores[0] + scores[1] > 10 && _frame < 11) {
-        res.status(400).send({ error: 'frame total shouldn\'t be higher than 10' });
-        
+        throw new Error('frame total shouldn\'t be higher than 10');
     }
     else if (scores[0] + scores[1] > 20 && _frame === 11) {
-        res.status(400).send({ error: 'frame total shouldn\'t be higher than 20' })
+        throw new Error('frame total shouldn\'t be higher than 20');
     }
     else {
         return true;
