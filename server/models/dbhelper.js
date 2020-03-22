@@ -17,6 +17,37 @@ const getDocument = (id) => {
     })
 };
 
+const insertDocument = function (name) {
+
+    return new Promise((resolve, reject) => {
+
+        const data = {
+            body: {
+                name: name,
+                scoresAray: [],
+                consecutiveScoresArray: [],
+                spare: false,
+                strikeTotal: 0,
+                frames: 1,
+                gameOver: false,
+                totalScore: 0
+            }
+        }
+
+        const scoreboard = new Scoreboard(data);
+        scoreboard.save((error, result) => {
+            if (error) {
+                reject(error)
+
+            } else {
+                resolve(result)
+
+            }
+        })
+    })
+};
+
+
 const removeAll = function () {
 
     return new Promise((resolve, reject) => {
@@ -27,7 +58,7 @@ const removeAll = function () {
                 resolve(result)
             } else {
                 console.log(err);
-                
+
                 reject(err);
             }
         });
@@ -36,5 +67,6 @@ const removeAll = function () {
 
 module.exports = {
     getDocument,
+    insertDocument,
     removeAll
 }

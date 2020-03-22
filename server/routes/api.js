@@ -3,7 +3,7 @@ const router = express.Router();
 const { addScore, gameRestart, getTotalScore, getFrames, getScores, getConsecutiveScores, getGameOver, addPlayer, findPlayerByid, players } = require('../evalScore.js');
 const uuid = require('uuid').v1;
 const Scoreboard = require('../models/scoreboard');
-const { getDocument, removeAll } = require('../models/dbHelper.js');
+const { getDocument, removeAll, insertDocument } = require('../models/dbHelper.js');
 
 //test route for db all platers
 router.get('/', (req, res) => {
@@ -111,38 +111,21 @@ router.get('/player/:id', async (req, res) => {
  *      name: "name"
  *  }
  */
-router.post('/player', (req, res) => {
+router.post('/player', async (req, res) => {
 
     const name = req.body.name;
-    console.log(req.body);
-
-    const data = {
-        body: {
-            name: name,
-            scoresAray: [],
-            consecutiveScoresArray: [],
-            spare: false,
-            strikeTotal: 0,
-            frames: 1,
-            gameOver: false,
-            totalScore: 0
-        }
+    
+    if(name===undefined){
+        res.status(400).send({ error: `must be in the format {name:'charlie'}` });
     }
-    const scoreboard = new Scoreboard(data);
-    scoreboard.save((error, result) => {
-        if (error) {
-            console.log(`Error: ${error.message}`);
 
-        } else {
-            console.log('data saved', result);
-            res.status(200).json({ result });
-
-
-        }
-    })
-
-    // const id = uuid();
-    // addPlayer(name, id);
+    try {
+        const player = await insertDocument(name);
+        res.json(player);
+    }
+    catch (err) {
+        res.status(400).send({ error: err });
+    }
 
 });
 
