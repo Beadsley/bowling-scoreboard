@@ -1,78 +1,17 @@
 const express = require('express');
 const router = express.Router();
-const { addScore, gameRestart, getTotalScore, getFrames, getScores, getConsecutiveScores, getGameOver, addPlayer, findPlayerByid, players } = require('../evalScore.js');
-const uuid = require('uuid').v1;
+const { addScore} = require('../evalScore.js');
 const Scoreboard = require('../models/scoreboard');
 const { getDocument, removeAll, insertDocument, updateDocument } = require('../models/dbHelper.js');
 
 //test route for db all platers
-router.get('/', (req, res) => {
+router.get('/players', (req, res) => {
     Scoreboard.find({}).then(data => {
         res.status(200).json(data);
 
     })
 });
-/**
- * gets the scores of each frame played
- * player id needs to be specified
- */
-router.get('/player/scores/:id', (req, res) => {
 
-    const id = req.params.id;
-    const exists = findPlayerByid(id);
-
-    if (!exists) {
-        res.status(400).send({ error: `player with id: [${id}] doesn\'t exist` });
-    }
-    else if (getFrames(id) !== 1) {
-        const scores = getScores(id);
-        res.status(200).json(scores);
-    }
-    else {
-        res.status(400).send({ error: 'Game hasn\'t started yet!' });
-    }
-});
-
-/**
- * gets the consecutivetotal for each frame played
- * player id needs to be specified
- */
-router.get('/player/consecutiveScores/:id', (req, res) => {
-
-    const id = req.params.id;
-    const exists = findPlayerByid(id);
-
-    if (!exists) {
-        res.status(400).send({ error: `player with id: [${id}] doesn\'t exist` });
-    }
-    else if (getFrames(id) !== 1) {
-        const consecScores = getConsecutiveScores(id);
-        res.status(200).json(consecScores);
-    }
-    else {
-        res.status(400).send({ error: 'Game hasn\'t started yet!' });
-    }
-});
-/**
- * gets the total number of points
- * player id needs to be specified
- */
-router.get('/player/total/:id', (req, res) => {
-
-    const id = req.params.id;
-    const exists = findPlayerByid(id);
-
-    if (!exists) {
-        res.status(400).send({ error: `player with id: [${id}] doesn\'t exist` });
-    }
-    else if (getFrames(id) !== 1) {
-        const totalScore = getTotalScore(id);
-        res.status(200).json(totalScore);
-    }
-    else {
-        res.status(400).send({ error: 'Game hasn\'t started yet!' });
-    }
-});
 
 /**
  * restarts the game and deletes all scores
@@ -129,10 +68,6 @@ router.post('/player', async (req, res) => {
 
 });
 
-router.get('/players', (req, res) => {
-    res.status(200).json(players);
-});
-
 /**
  * adds a score from a frame to the scores array.
  * player id needs to be specified.
@@ -165,8 +100,10 @@ router.put('/player/score/:id', async (req, res) => {
     catch (err) {
         if (err.kind === "ObjectId") {
             res.status(400).send({ error: `player with id: [${id}] doesn\'t exist` });
+        } else {
+            res.status(400).send({ error: err });
+
         }
-        res.status(400).send({ error: err });
     }
 });
 

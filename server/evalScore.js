@@ -1,5 +1,3 @@
-const { getDocument, updateDocument, removeAll, insertDocument } = require('./models/dbHelper.js');
-
 const addScore = async (rolls, id, player) => {
 
 
@@ -41,10 +39,7 @@ const addScore = async (rolls, id, player) => {
     player.body.frames += 1;
     console.log('after ', player);
     return player;
-    //return players[id].scoresAray;
 }
-
-
 
 const totalBowlingScore = (rollsArray) => {
 
@@ -75,45 +70,8 @@ const checkEndOfGame = (player) => {
     return player;
 }
 
-const findPlayerByid = (id) => {
-    const keys = Object.keys(players);
-    const exists = keys.includes(id);
-    return exists;
-}
-
-const getScores = (id) => {
-    return players[id].scoresAray;
-}
-
-const getTotalScore = (id) => {
-    return totalBowlingScore(players[id].scoresAray);
-}
-
-const getConsecutiveScores = (id) => {
-    return players[id].consecutiveScoresArray;
-}
-
-const getFrames = (id) => {
-    try {
-        return players[id].frames;
-    }
-    catch (err) {
-        return 0;
-    }
-
-}
-
-const getGameOver = (id) => {
-    return players[id].gameOver;
-}
 
 module.exports = {
     addScore,
-    getTotalScore,
-    getFrames,
-    getScores,
-    getConsecutiveScores,
-    getGameOver,
-    findPlayerByid,
 };
 
