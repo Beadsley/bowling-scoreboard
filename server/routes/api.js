@@ -4,7 +4,7 @@ const { addScore, gameRestart, getTotalScore, getFrames, getScores, getConsecuti
 const uuid = require('uuid').v1;
 const Scoreboard = require('../models/scoreboard');
 
-//test route for db
+//test route for db all platers
 router.get('/', (req, res) => {
     Scoreboard.find({}).then(data => {
         res.status(200).json(data);
@@ -77,10 +77,30 @@ router.get('/player/total/:id', (req, res) => {
  * restarts the game and deletes all scores
  */
 router.delete('/game', (req, res) => {
+    const scoreboard = new Scoreboard();
+    scoreboard.deleteMany({}, function (err, result) {
+        if (!err) {
+            console.log("Removed everything");
+            res.status(204).end();
+        }
 
-    gameRestart();
-    res.status(204).end();
+    });
+    //gameRestart();
 });
+
+
+router.get('/player/:id', (req, res) => {
+    const id = req.params.id;
+    Scoreboard.findById(id, function (err, data) {
+        if (err) {
+            res.status(400).send({ message: `Player with id: ${id} not found` });
+        }
+        else {
+            res.status(200).json({ data });
+
+        }
+    })
+})
 
 /**
  * Creates a player. a name has to be specified in the

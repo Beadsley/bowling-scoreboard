@@ -18,6 +18,7 @@ mongoose.connection.on('connected', () => {
     console.log('mongoose connected');    
 
 })
+mongoose.connection.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 app.use(morgan('tiny'))
 app.use(bodyParser.urlencoded({ extended: false }));
