@@ -2,7 +2,7 @@ const { getDocument, updateDocument, removeAll, insertDocument } = require('./mo
 
 const addScore = async (rolls, id, player) => {
 
-    
+
     console.log('before ', player);
     player.body.strikeTotal
     if (player.body.strikeTotal >= 2) {
@@ -34,8 +34,9 @@ const addScore = async (rolls, id, player) => {
     player.body.scoresAray.push(rolls);
     const totalScore = totalBowlingScore(player.body.scoresAray);
     player.body.consecutiveScoresArray.push(totalScore);
+    player.body.totalScore = totalScore;
 
-    //checkEndOfGame(players[id].frames, players[id].spare, players[id].strikeTotal, id);
+    player = checkEndOfGame(player);
 
     player.body.frames += 1;
     console.log('after ', player);
@@ -54,21 +55,24 @@ const totalBowlingScore = (rollsArray) => {
     return totalScore;
 }
 
-const checkEndOfGame = (frames, spare, strikeTotal, id) => {
+const checkEndOfGame = (player) => {
+    const { frames, spare, strikeTotal } = player.body
     console.log(frames, spare, strikeTotal);
 
     if (frames === 10 && !spare && strikeTotal === 0) {
-        players[id].gameOver = true;
+        player.body.gameOver = true;
     } // ! TODO perhaps just have else if frames > 11 gameover
     else if (frames === 11 && spare && strikeTotal === 0) {
-        players[id].gameOver = true;
+        player.body.gameOver = true;
     }
     else if (frames === 11 && !spare && strikeTotal > 1) {
-        players[id].gameOver = true;
+        player.body.gameOver = true;
     }
     else if (frames >= 11) {
-        players[id].gameOver = true;
+        player.body.gameOver = true;
     }
+
+    return player;
 }
 
 const findPlayerByid = (id) => {
