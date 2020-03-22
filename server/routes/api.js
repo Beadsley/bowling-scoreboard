@@ -77,11 +77,13 @@ router.get('/player/total/:id', (req, res) => {
  * restarts the game and deletes all scores
  */
 router.delete('/game', (req, res) => {
-    const scoreboard = new Scoreboard();
-    scoreboard.deleteMany({}, function (err, result) {
+    Scoreboard.deleteMany({}, function (err, result) {
         if (!err) {
             console.log("Removed everything");
             res.status(204).end();
+        }
+        else {
+            res.status(400).send({ message: error.message });
         }
 
     });
