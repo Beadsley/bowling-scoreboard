@@ -8,12 +8,32 @@
   grid-auto-flow: column;
 }
 .boards-container {
+  margin-top: 15px;
   display: grid;
   grid-gap: 15px;
 }
 
+.interactivity{
+  display: grid;
+  min-height: 30px;
+  height: 30px;
+}
 .frame-element {
   border: 1px solid black;
+  margin: 0px;
+  padding: 0%;
+}
+.name{
+  width: 160px;
+  height: 60px;
+}
+.frame {
+  width: 65px;
+  height: 60px;
+}
+.total{
+  width: 106px;
+  height: 60px;
 }
 
 .roll {
@@ -28,4 +48,16 @@
 }
 .name {
   min-width: 100px;
+}
+
+.details{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+.name-input{
+  padding-right: 5px;
+}
+.start-game-btn{
+  padding-left: 5px;
 }
