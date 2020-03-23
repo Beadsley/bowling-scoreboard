@@ -1,7 +1,5 @@
 const mongoose = require('mongoose');
 
-// SCHEMA
-
 const Schema = mongoose.Schema;
 const ScoreboardSchema = new Schema({
     body: Object,
@@ -10,8 +8,6 @@ const ScoreboardSchema = new Schema({
         default: Date.now()
     }
 })
-
-// Model
 
 const Scoreboard = mongoose.model('Scoreboard', ScoreboardSchema);
 

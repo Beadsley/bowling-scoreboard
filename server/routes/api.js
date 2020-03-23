@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const { addScore } = require('../evalScore.js');
-const { getDocument, getDocuments, removeAll, insertDocument, updateDocument } = require('../models/dbHelper.js');
+const { getDocument, getDocuments, removeAll, insertDocument, updateDocument } = require('../models/dbhelper.js');
 
-//test route for db all platers
+
 router.get('/players', async(req, res) => {
 
     try {
@@ -15,10 +15,6 @@ router.get('/players', async(req, res) => {
     }
 });
 
-
-/**
- * restarts the game and deletes all scores
- */
 router.delete('/game', async (req, res) => {
 
     try {
@@ -28,8 +24,7 @@ router.delete('/game', async (req, res) => {
     catch (err) {
         res.status(400).send({ message: err }); //maybe not 400
     }
-
-    //gameRestart();
+    
 });
 
 
