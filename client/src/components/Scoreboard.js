@@ -10,7 +10,7 @@ function EnterName(game) {
     const [boards, setBoards] = useState([]);
 
     useEffect(() => {
-        
+
         if (game.players.length !== 0) {
             console.log(game.players);
 
@@ -30,14 +30,12 @@ function EnterName(game) {
 
     function generateBoard() {
 
-        game.players.forEach(async (player) => {
-            
+        game.players.forEach(async (player, index) => {
+
             let board = [];
-            
             const result = await fetchPlayer(player.id);
-            const {_id} = result;            
-            const {scores, consecutiveScores, totalScore, name} = result.body;
-            
+            const { scores, consecutiveScores, totalScore, name } = result.body;
+
             for (let index = 0; index <= 9; index++) {
                 let roll1 = "";
                 let roll2 = "";
@@ -61,25 +59,17 @@ function EnterName(game) {
                     </div>
                 )
             }
-            console.log(player.name);
-            
-            
+
             board.unshift(<div className="frame-element name"> {name}</div>)
+            board.push(<div className="total frame-element"> Total:{totalScore}</div>)
 
-            if (scores.error !== 'Game hasn\'t started yet!') {
-                board.push(<div className="total frame-element"> {totalScore}</div>)
-            }
-            else {
-                board.push(<div className="total frame-element"> TOTAL</div>)
-            }
-
-            if (!game.started) {
-                setBoards([...boards, { id: _id, score: board }]);
-            }
-            else {
+            if (game.started) {
                 const index = boards.findIndex(board => board.id === player.id);
                 boards.splice(index, 1, { id: player.id, score: board });
                 setBoards([...boards]);
+            }
+            else if ((game.players.length - 1 === index)) {
+                setBoards([...boards, { id: player.id, score: board }]);
             }
         });
 
@@ -89,6 +79,7 @@ function EnterName(game) {
         <>
 
             <div className="boards-container">
+                {console.log(boards)}
                 {boards.map(board => <div className="board-container">{board.score}</div>)}
             </div>
 
