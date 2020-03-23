@@ -87,11 +87,8 @@ const removeAll = function () {
 
         Scoreboard.deleteMany({}, function (err, result) {
             if (!err) {
-                console.log("Removed everything");
                 resolve(result)
             } else {
-                console.log(err);
-
                 reject(err);
             }
         });
