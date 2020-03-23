@@ -32,9 +32,9 @@ function EnterName(game) {
 
         game.players.forEach(async (player, index) => {
 
-            let column1 = []
-            let column2 = []
-            let column3 = []
+            let row1 = []
+            let row2 = []
+            let row3 = []
             const result = await fetchPlayer(player.id);
             const { scores, consecutiveScores, totalScore, name } = result.body;
 
@@ -50,17 +50,18 @@ function EnterName(game) {
                         consecutiveScore = consecutiveScores[index]
                     }
                 }
-                column1.push(<th>{index + 1}</th>)
-                column2.push(<td>{roll1} : {roll2} </td>)
-                column3.push(<td>{consecutiveScore} </td>)
+                row1.push(<th>{index + 1}</th>)
+                row2.push(<td>{roll1} : {roll2} </td>)
+                row3.push(<td>{consecutiveScore} </td>)
 
             }
-            column1.unshift(<th>name</th>)
-            column1.push(<th>total</th>)
-            column2.unshift(<th>{name}</th>)
-            column2.push(<th>{totalScore}</th>)
-            column3.unshift(<th></th>)
-            const table= <table> <tr> {column1}</tr> <tr>{column2} </tr><tr>{column3} </tr></table>
+            row1.unshift(<th>name</th>)
+            row1.push(<th>total</th>)
+            row2.unshift(<th>{name}</th>)
+            row2.push(<td>{totalScore}</td>)
+            row3.unshift(<th></th>)
+            row3.push(<td></td>)
+            const table= <table> <tr> {row1}</tr> <tr>{row2} </tr><tr>{row3} </tr></table>
 
             if (game.started) {
                 const index = boards.findIndex(board => board.id === player.id);
