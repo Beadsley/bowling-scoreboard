@@ -51,8 +51,8 @@ function EnterName(game) {
                     }
                 }
                 row1.push(<th>{index + 1}</th>)
-                row2.push(<td>{roll1} : {roll2} </td>)
-                row3.push(<td>{consecutiveScore} </td>)
+                row2.push(<td>{roll1}:{roll2}</td>)
+                row3.push(<td>{consecutiveScore}</td>)
 
             }
             row1.unshift(<th>name</th>)
@@ -61,15 +61,15 @@ function EnterName(game) {
             row2.push(<td>{totalScore}</td>)
             row3.unshift(<th></th>)
             row3.push(<td></td>)
-            const table= <table> <tr> {row1}</tr> <tr>{row2} </tr><tr>{row3} </tr></table>
+            const table = <table><tbody><tr>{row1}</tr><tr>{row2}</tr><tr>{row3}</tr></tbody></table>
 
             if (game.started) {
                 const index = boards.findIndex(board => board.id === player.id);
-                boards.splice(index, 1, {id: player.id, score: table });
+                boards.splice(index, 1, { id: player.id, score: table });
                 setBoards([...boards]);
             }
             else if ((game.players.length - 1 === index)) {
-                    setBoards([...boards, { id: player.id, score: table }]);
+                setBoards([...boards, { id: player.id, score: table }]);
             }
         });
 
@@ -78,11 +78,11 @@ function EnterName(game) {
     return (
         <>
 
-                    <div className="boards-container">
-                        {boards.map(board => <div className="board-container">{board.score}</div>)}
-                    </div>
+            <div className="boards-container">
+                {boards.map(board => <div className="board-container">{board.score}</div>)}
+            </div>
 
-                </>
+        </>
     )
 }
 

@@ -39,7 +39,7 @@ function Input(game) {
                     createPlayer(userInput)
                 }}>
                     <input className="name-input" type="text" name="name" id="nameInput" required placeholder="Add a player..."
-                        autoComplete="off" maxlength="10 " />
+                        autoComplete="off" maxLength="10 " />
                 </form>
                 <button className="start-game-btn" style={game.started ? { visibility: "hidden" } : { visibility: "visible" }}
                     onClick={game.players.length !== 0 ? game.startGame : () => { alert.show('add a player...') }}>Start game</button>
