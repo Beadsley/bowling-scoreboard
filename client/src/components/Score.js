@@ -78,7 +78,6 @@ function Score() {
       })
     })
     const result = await response.json()
-    console.log(result.body.gameOver);
     if (result.body.gameOver) {
       const currentPlayerIndex = players.findIndex(player => player.id == game.currentPlayer.id);
       players[currentPlayerIndex].gameOver = true;
@@ -95,6 +94,8 @@ function Score() {
       index = 0;
       const nextPlayer = { id: players[index].id, name: players[index].name };
       setGame({ ...game, score: [], roll: 0, frameScore: 0, frame: game.frame + 1, currentPlayer: nextPlayer });
+      console.log(players[index].gameOver);
+
     }
     else {
       index++;
@@ -155,15 +156,15 @@ function Score() {
     const finished = players.every(player => player.gameOver === true);
     return finished
 
-}
+  }
 
   return (
     <>
       <div className=".interactivity">
-        {buttons}
+        {gameOver() ? "" : buttons}
         <Input {...game} startGame={startGame} addPlayer={addPlayer} players={players} />
       </div>
-      <Scoreboard {...game} players={players} over={gameOver}/>
+      <Scoreboard {...game} players={players} over={gameOver} />
     </>
   );
 }
