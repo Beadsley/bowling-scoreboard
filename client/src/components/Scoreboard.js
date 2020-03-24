@@ -6,12 +6,10 @@ function EnterName(game) {
     const [boards, setBoards] = useState([]);
 
     useEffect(() => {
-        console.log(game.currentPlayer);
         console.log(game.started);
 
 
         if (game.players.length !== 0) {
-
             generateBoard();
         }
     }, [game.players, game.currentPlayer]);
@@ -75,9 +73,17 @@ function EnterName(game) {
 
     }
 
+    function gameOver() {
+
+        const finished = game.players.every(player => player.gameOver === true);
+        return finished
+
+    }
+
     return (
         <>
-            <h2>{game.currentPlayer ? game.currentPlayer.name +" your up!": ""} </h2>
+            <h2>{game.currentPlayer && !gameOver() && game.started ? game.currentPlayer.name + " your up!" : ""} </h2>
+            <h2>{gameOver() && game.started ? "its all over!" : ""} </h2>
             <div className="boards-container">
                 {boards.map(board => <div className="board-container">{board.score}</div>)}
             </div>

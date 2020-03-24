@@ -58,7 +58,7 @@ function Score() {
     const player = {
       id,
       name,
-      playing: false,
+      gameOver: false,
       frame10Strike: false,
       frame10Spare: false
     }
@@ -78,7 +78,12 @@ function Score() {
       })
     })
     const result = await response.json()
-    console.log(result);
+    console.log(result.body.gameOver);
+    if (result.body.gameOver) {
+      const currentPlayerIndex = players.findIndex(player => player.id == game.currentPlayer.id);
+      players[currentPlayerIndex].gameOver = true;
+      setPlayers([...players]);
+    }
 
     selectNextPlayer();
 
