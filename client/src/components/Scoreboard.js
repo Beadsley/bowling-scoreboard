@@ -1,11 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useAlert } from 'react-alert'
 import '../styles/App.css';
 
 function EnterName(game) {
-
-    const alert = useAlert()
-
 
     const [boards, setBoards] = useState([]);
 
