@@ -32,6 +32,7 @@ function EnterName(game) {
             let row3 = []
             const result = await fetchPlayer(player.id);
             const { scores, consecutiveScores, totalScore, name } = result.body;
+            console.log('strike', player.frame10Strike, scores.length);
 
             for (let index = 0; index <= 9; index++) {
                 let roll1 = "";
