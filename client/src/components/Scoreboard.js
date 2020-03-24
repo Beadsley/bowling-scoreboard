@@ -12,7 +12,6 @@ function EnterName(game) {
     useEffect(() => {
 
         if (game.players.length !== 0) {
-            console.log(game.players);
 
             generateBoard();
         }
@@ -51,7 +50,9 @@ function EnterName(game) {
                     }
                 }
                 row1.push(<th>{index + 1}</th>)
-                row2.push(<td>{roll1}:{roll2}</td>)
+                row2.push(game.frame === 12 && (player.frame10Spare === true || player.frame10Strike === true) && index === 9 ?
+                    <td>{roll1}:{scores[10][0]}:{scores[10][1]}</td> :
+                    <td>{roll1}:{roll2}</td>)
                 row3.push(<td>{consecutiveScore}</td>)
 
             }
