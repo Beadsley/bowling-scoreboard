@@ -48,10 +48,17 @@ td {
   display: flex;
   flex-direction: row;
   justify-content: center;
+  align-items: center;
+}
+.add-player-btn{
+  margin-right: 5px;
 }
 .name-input{
+  height: 20px;
+  padding-left: 5px;
   padding-right: 5px;
 }
 .start-game-btn{
   padding-left: 5px;
+  margin-left: 5px;
 }

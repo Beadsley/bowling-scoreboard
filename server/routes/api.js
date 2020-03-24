@@ -96,7 +96,7 @@ router.put('/player/score/:id', async (req, res) => {
         }
 
     }
-    catch (err) {        
+    catch (err) {         
         if (err.kind === "ObjectId") {
             res.status(400).send({ error: `player with id: [${id}] doesn\'t exist` });
         } else {

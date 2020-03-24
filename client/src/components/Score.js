@@ -58,7 +58,7 @@ function Score() {
     const player = {
       id,
       name,
-      playing: false,
+      gameOver: false,
       frame10Strike: false,
       frame10Spare: false
     }
@@ -78,7 +78,11 @@ function Score() {
       })
     })
     const result = await response.json()
-    console.log(result);
+    if (result.body.gameOver) {
+      const currentPlayerIndex = players.findIndex(player => player.id == game.currentPlayer.id);
+      players[currentPlayerIndex].gameOver = true;
+      setPlayers([...players]);
+    }
 
     selectNextPlayer();
 
@@ -86,15 +90,31 @@ function Score() {
 
   function selectNextPlayer() {
     let index = players.findIndex(player => player.id == game.currentPlayer.id)
+
     if (index === players.length - 1) {
       index = 0;
-      const nextPlayer = { id: players[index].id, name: players[index].name };
-      setGame({ ...game, score: [], roll: 0, frameScore: 0, frame: game.frame + 1, currentPlayer: nextPlayer });
+
+      if (players[index].gameOver) {
+        index = players.findIndex(player => player.gameOver === false);
+
+      }
+      if (index !== -1) {
+        const nextPlayer = { id: players[index].id, name: players[index].name };
+        setGame({ ...game, score: [], roll: 0, frameScore: 0, frame: game.frame + 1, currentPlayer: nextPlayer });
+      }
+
     }
     else {
       index++;
-      const nextPlayer = { id: players[index].id, name: players[index].name };
-      setGame({ ...game, score: [], roll: 0, frameScore: 0, frame: game.frame, currentPlayer: nextPlayer });
+      if (players[index].gameOver) {
+        index = players.findIndex(player => player.gameOver === false);
+
+      }
+      if (index !== -1) {
+        const nextPlayer = { id: players[index].id, name: players[index].name };
+        setGame({ ...game, score: [], roll: 0, frameScore: 0, frame: game.frame, currentPlayer: nextPlayer });
+      }
+
     }
   }
 
@@ -122,7 +142,7 @@ function Score() {
   function generateScoreButtons() {
 
     let pins = [];
-    for (let pin = 1; pin <= 10 - game.frameScore; pin++) {
+    for (let pin = 0; pin <= 10 - game.frameScore; pin++) {
 
       pins.push(<button onClick={() => {
         const stikeinFinalFrame = evalLastFrame(pin)
@@ -144,13 +164,21 @@ function Score() {
 
   }
 
+
+  function gameOver() {
+
+    const finished = players.every(player => player.gameOver === true);
+    return finished
+
+  }
+
   return (
     <>
       <div className=".interactivity">
-        {buttons}
+        {gameOver() ? "" : buttons}
         <Input {...game} startGame={startGame} addPlayer={addPlayer} players={players} />
       </div>
-      <Scoreboard {...game} players={players} />
+      <Scoreboard {...game} players={players} over={gameOver} />
     </>
   );
 }
