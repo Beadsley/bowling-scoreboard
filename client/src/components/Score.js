@@ -149,13 +149,21 @@ function Score() {
 
   }
 
+
+  function gameOver() {
+
+    const finished = players.every(player => player.gameOver === true);
+    return finished
+
+}
+
   return (
     <>
       <div className=".interactivity">
         {buttons}
         <Input {...game} startGame={startGame} addPlayer={addPlayer} players={players} />
       </div>
-      <Scoreboard {...game} players={players} />
+      <Scoreboard {...game} players={players} over={gameOver}/>
     </>
   );
 }
