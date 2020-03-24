@@ -52,11 +52,11 @@ function EnterName(game) {
                 row3.push(<td>{consecutiveScore}</td>)
 
             }
-            row1.unshift(<th></th>)
-            row1.push(<th>total</th>)
-            row2.unshift(<th style={player.id === game.currentPlayer.id ? { color: 'white' } : { color: 'black' }}>{name}</th>)
+            row1.unshift(<th className="column1-header"></th>)
+            row1.push(<th className="column1-header">total</th>)
+            row2.unshift(<th style={player.id === game.currentPlayer.id && !game.over() ? { color: 'white' } : { color: 'black' }} className="column1-header">{name}</th>)
             row2.push(<td>{totalScore}</td>)
-            row3.unshift(<th></th>)
+            row3.unshift(<th className="column1-header"></th>)
             row3.push(<td></td>)
             const table = <table><tbody><tr>{row1}</tr><tr>{row2}</tr><tr>{row3}</tr></tbody></table>
 
