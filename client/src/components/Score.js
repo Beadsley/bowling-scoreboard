@@ -5,12 +5,14 @@ import Input from './Input';
 function Score() {
 
   const [buttons, setButtons] = useState([]);
-  const [game, setGame] = useState({ started: false, roll: 0, score: [], frame: 1, frameScore: 0, currentPlayer: undefined });
+  const [game, setGame] = useState({ started: false, roll: 0, score: [], frame: 1, frameScore: 0, currentPlayer: { id: undefined, name: undefined } });
   const [players, setPlayers] = useState([]);
 
   useEffect(() => {
+    
 
-    if (game.started && game.currentPlayer !== undefined) {
+    if (game.started) {
+      
       //console.log('frame', game.frame, 'prevframesscore: ', game.frameScore, 'roll: ', game.roll, game.currentPlayer);
 
       if (game.frameScore === 10 && game.roll === 1 && game.frame < 11) {

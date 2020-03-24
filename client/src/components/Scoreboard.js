@@ -9,7 +9,6 @@ function EnterName(game) {
 
 
         if (game.players.length !== 0) {
-            console.log('frame', game.frame);
             generateBoard();
         }
     }, [game.players, game.currentPlayer]);
@@ -33,7 +32,6 @@ function EnterName(game) {
             let row3 = []
             const result = await fetchPlayer(player.id);
             const { scores, consecutiveScores, totalScore, name } = result.body;
-            console.log('strike', player.frame10Strike, scores.length);
 
             for (let index = 0; index <= 9; index++) {
                 let roll1 = "";
@@ -54,9 +52,9 @@ function EnterName(game) {
                 row3.push(<td>{consecutiveScore}</td>)
 
             }
-            row1.unshift(<th>name</th>)
+            row1.unshift(<th></th>)
             row1.push(<th>total</th>)
-            row2.unshift(<th>{name}</th>)
+            row2.unshift(<th style={player.id === game.currentPlayer.id ? { color: '#f79646' } : { color: 'black' }}>{name}</th>)
             row2.push(<td>{totalScore}</td>)
             row3.unshift(<th></th>)
             row3.push(<td></td>)
