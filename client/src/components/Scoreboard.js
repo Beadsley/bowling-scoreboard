@@ -54,7 +54,7 @@ function EnterName(game) {
             }
             row1.unshift(<th></th>)
             row1.push(<th>total</th>)
-            row2.unshift(<th style={player.id === game.currentPlayer.id ? { color: '#f79646' } : { color: 'black' }}>{name}</th>)
+            row2.unshift(<th style={player.id === game.currentPlayer.id ? { color: 'white' } : { color: 'black' }}>{name}</th>)
             row2.push(<td>{totalScore}</td>)
             row3.unshift(<th></th>)
             row3.push(<td></td>)

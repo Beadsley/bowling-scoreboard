@@ -23,7 +23,7 @@ table{
 
 th {
 	padding: 8px;
-	background-color: #fde9d9;
+	background-color: #63ccff;
   font-size: medium;
   width: 60px;
 }
@@ -32,7 +32,7 @@ td {
 	padding: 3px;
 	border-width: 1px;
 	border-style: solid;
-  border-color: #f79646 #ccc;
+  border-color: #006db3 #ccc;
   text-align: right;
 }
 
