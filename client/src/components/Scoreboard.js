@@ -6,6 +6,9 @@ function EnterName(game) {
     const [boards, setBoards] = useState([]);
 
     useEffect(() => {
+        console.log(game.currentPlayer);
+        console.log(game.started);
+
 
         if (game.players.length !== 0) {
 
@@ -74,7 +77,7 @@ function EnterName(game) {
 
     return (
         <>
-
+            <h2>{game.currentPlayer ? game.currentPlayer.name +" your up!": ""} </h2>
             <div className="boards-container">
                 {boards.map(board => <div className="board-container">{board.score}</div>)}
             </div>
