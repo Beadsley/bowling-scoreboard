@@ -79,7 +79,6 @@ function EnterName(game) {
         <>
 
                     <div className="boards-container">
-                        {console.log(boards)}
                         {boards.map(board => <div className="board-container">{board.score}</div>)}
                     </div>
 
