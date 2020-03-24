@@ -4,51 +4,45 @@
 }
 
 .board-container {
-  display: grid;
-  grid-auto-flow: column;
+	width: 100%;
+	padding: 20px;
+	margin: auto;
 }
 .boards-container {
   margin-top: 15px;
   display: grid;
   grid-gap: 15px;
 }
+table{
+  margin: auto;
+	width: 80%;
+	border-collapse: collapse;
+	border: 1px solid #fff; /*for older IE*/
+	border-style: hidden;
+}
+
+th {
+	padding: 8px;
+	background-color: #fde9d9;
+  font-size: medium;
+  width: 60px;
+}
+
+td {
+	padding: 3px;
+	border-width: 1px;
+	border-style: solid;
+  border-color: #f79646 #ccc;
+  text-align: right;
+}
+
 
 .interactivity{
   display: grid;
   min-height: 30px;
   height: 30px;
 }
-.frame-element {
-  border: 1px solid black;
-  margin: 0px;
-  padding: 0%;
-}
-.name{
-  width: 160px;
-  height: 60px;
-}
-.frame {
-  width: 65px;
-  height: 60px;
-}
-.total{
-  width: 106px;
-  height: 60px;
-}
 
-.roll {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  align-items: center;
-  min-height: 18px;
-  
-}
-.roll div{
-}
-.name {
-  min-width: 100px;
-}
 
 .details{
   display: flex;

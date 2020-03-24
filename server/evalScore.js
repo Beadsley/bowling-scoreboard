@@ -26,7 +26,6 @@ const addScore = async (rolls, id, player) => {
     else {
         player.body.strikeTotal = 0;
     }
-    console.log('rolls', rolls);
     
     player.body.scores.push(rolls);
     const totalScore = totalBowlingScore(player.body.scores);

@@ -23,7 +23,7 @@ function Input(game) {
     return (
         <>
             <div className="details">
-                <form className="name-input" style={game.started ? { display: "none" } : { display: "block" }} onSubmit={(e) => {
+                <form className="name-input" style={game.started ? { visibility: "hidden" } : { visibility: "visible" }} onSubmit={(e) => {
                     e.preventDefault();
                     createPlayer(e.target[0].value)
 
@@ -31,7 +31,7 @@ function Input(game) {
                     <input type="text" name="name" id="nameInput" required placeholder="Add a player..."
                         autoComplete="off" maxlength="10 " />
                 </form>
-                <button className="start-game-btn" style={game.started ? { display: "none" } : { display: "block" }} onClick={game.players.length !== 0 ? game.startGame : () => { alert.show('add a player...') }}>Start game</button>
+                <button className="start-game-btn" style={game.started ? { visibility: "hidden" } : { visibility: "visible" }} onClick={game.players.length !== 0 ? game.startGame : () => { alert.show('add a player...') }}>Start game</button>
             </div>
         </>
     )
