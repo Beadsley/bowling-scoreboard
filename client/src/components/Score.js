@@ -90,17 +90,31 @@ function Score() {
 
   function selectNextPlayer() {
     let index = players.findIndex(player => player.id == game.currentPlayer.id)
+
     if (index === players.length - 1) {
       index = 0;
-      const nextPlayer = { id: players[index].id, name: players[index].name };
-      setGame({ ...game, score: [], roll: 0, frameScore: 0, frame: game.frame + 1, currentPlayer: nextPlayer });
-      console.log(players[index].gameOver);
+
+      if (players[index].gameOver) {
+        index = players.findIndex(player => player.gameOver === false);
+
+      }
+      if (index !== -1) {
+        const nextPlayer = { id: players[index].id, name: players[index].name };
+        setGame({ ...game, score: [], roll: 0, frameScore: 0, frame: game.frame + 1, currentPlayer: nextPlayer });
+      }
 
     }
     else {
       index++;
-      const nextPlayer = { id: players[index].id, name: players[index].name };
-      setGame({ ...game, score: [], roll: 0, frameScore: 0, frame: game.frame, currentPlayer: nextPlayer });
+      if (players[index].gameOver) {
+        index = players.findIndex(player => player.gameOver === false);
+
+      }
+      if (index !== -1) {
+        const nextPlayer = { id: players[index].id, name: players[index].name };
+        setGame({ ...game, score: [], roll: 0, frameScore: 0, frame: game.frame, currentPlayer: nextPlayer });
+      }
+
     }
   }
 
