@@ -4,6 +4,13 @@ import { useAlert } from 'react-alert'
 function Input(game) {
 
     const alert = useAlert()
+    const [userInput, setUserInput] = useState('');
+
+    function handleUserInput(e) {
+
+        setUserInput(e.target.value)
+
+    }
 
     async function createPlayer(name) {
 
@@ -23,16 +30,19 @@ function Input(game) {
     return (
         <>
             <div className="details">
-                <button className="add-player-btn"><i class="material-icons">add</i></button>
-                <form style={game.started ? { visibility: "hidden" } : { visibility: "visible" }} onSubmit={(e) => {
+                <button className="add-player-btn" onClick={() => userInput.length !== 0 ? createPlayer(userInput) : alert.show('enter a name...')}
+                    style={game.started ? { visibility: "hidden" } : { visibility: "visible" }}>
+                    <i className="material-icons">add</i>
+                </button>
+                <form style={game.started ? { visibility: "hidden" } : { visibility: "visible" }} onChange={handleUserInput} onSubmit={(e) => {
                     e.preventDefault();
-                    createPlayer(e.target[0].value)
-
+                    createPlayer(userInput)
                 }}>
-                    <input class="name-input" type="text" name="name" id="nameInput" required placeholder="Add a player..."
+                    <input className="name-input" type="text" name="name" id="nameInput" required placeholder="Add a player..."
                         autoComplete="off" maxlength="10 " />
                 </form>
-                <button className="start-game-btn" style={game.started ? { visibility: "hidden" } : { visibility: "visible" }} onClick={game.players.length !== 0 ? game.startGame : () => { alert.show('add a player...') }}>Start game</button>
+                <button className="start-game-btn" style={game.started ? { visibility: "hidden" } : { visibility: "visible" }}
+                    onClick={game.players.length !== 0 ? game.startGame : () => { alert.show('add a player...') }}>Start game</button>
             </div>
         </>
     )
