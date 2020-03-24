@@ -5,9 +5,11 @@ function EnterName(game) {
 
     const [boards, setBoards] = useState([]);
 
-    useEffect(() => {        
+    useEffect(() => {
+
 
         if (game.players.length !== 0) {
+            console.log('frame', game.frame);
             generateBoard();
         }
     }, [game.players, game.currentPlayer]);
@@ -31,6 +33,7 @@ function EnterName(game) {
             let row3 = []
             const result = await fetchPlayer(player.id);
             const { scores, consecutiveScores, totalScore, name } = result.body;
+            console.log('strike', player.frame10Strike, scores.length);
 
             for (let index = 0; index <= 9; index++) {
                 let roll1 = "";
@@ -45,7 +48,7 @@ function EnterName(game) {
                     }
                 }
                 row1.push(<th>{index + 1}</th>)
-                row2.push(game.frame === 12 && (player.frame10Spare === true || player.frame10Strike === true) && index === 9 ?
+                row2.push(game.frame === 11 && scores.length === 11 && index === 9 && (player.frame10Spare === true || player.frame10Strike === true) ?
                     <td>{roll1}:{scores[10][0]}:{scores[10][1]}</td> :
                     <td>{roll1}:{roll2}</td>)
                 row3.push(<td>{consecutiveScore}</td>)
