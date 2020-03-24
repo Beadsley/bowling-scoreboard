@@ -54,7 +54,7 @@ function EnterName(game) {
             }
             row1.unshift(<th className="column1-header"></th>)
             row1.push(<th className="column1-header">total</th>)
-            row2.unshift(<th style={player.id === game.currentPlayer.id && !game.over() ? { color: 'white' } : { color: 'black' }} className="column1-header">{name}</th>)
+            row2.unshift(<th style={player.id === game.currentPlayer.id && !game.over() ? { color: "white", "font-size": "large" } : { "font-size": "large" }} className="column1-header">{name}</th>)
             row2.push(<td>{totalScore}</td>)
             row3.unshift(<th className="column1-header"></th>)
             row3.push(<td></td>)
