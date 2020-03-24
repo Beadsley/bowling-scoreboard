@@ -122,7 +122,7 @@ function Score() {
   function generateScoreButtons() {
 
     let pins = [];
-    for (let pin = 1; pin <= 10 - game.frameScore; pin++) {
+    for (let pin = 0; pin <= 10 - game.frameScore; pin++) {
 
       pins.push(<button onClick={() => {
         const stikeinFinalFrame = evalLastFrame(pin)
