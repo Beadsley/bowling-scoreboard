@@ -9,10 +9,10 @@ function Score() {
   const [players, setPlayers] = useState([]);
 
   useEffect(() => {
-    
+
 
     if (game.started) {
-      
+
       //console.log('frame', game.frame, 'prevframesscore: ', game.frameScore, 'roll: ', game.roll, game.currentPlayer);
 
       if (game.frameScore === 10 && game.roll === 1 && game.frame < 11) {
@@ -176,11 +176,10 @@ function Score() {
 
   return (
     <div className="container">
-      <div className=".interactivity">
-        {gameOver() ? "" : buttons}
-        <Input {...game} startGame={startGame} addPlayer={addPlayer} players={players} />
-      </div>
+      {gameOver() ? "" : buttons}
+      <Input {...game} startGame={startGame} addPlayer={addPlayer} players={players} />
       <Scoreboard {...game} players={players} over={gameOver} />
+      <button style={game.started ? { visibility: "visible" } : { visibility: "hidden" }}>Restart</button>
     </div>
   );
 }

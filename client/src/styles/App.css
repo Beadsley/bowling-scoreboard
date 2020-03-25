@@ -18,6 +18,7 @@
 
 .boards-container {
   margin-top: 15px;
+  margin-bottom: 15px;
   display: grid;
   grid-gap: 15px;
 }
@@ -50,11 +51,6 @@ td {
   text-align: right;
 }
 
-.interactivity {
-  display: grid;
-  min-height: 30px;
-  height: 30px;
-}
 
 .details-container {
   display: flex;
