@@ -175,13 +175,13 @@ function Score() {
   }
 
   return (
-    <>
+    <div className="container">
       <div className=".interactivity">
         {gameOver() ? "" : buttons}
         <Input {...game} startGame={startGame} addPlayer={addPlayer} players={players} />
       </div>
       <Scoreboard {...game} players={players} over={gameOver} />
-    </>
+    </div>
   );
 }
 

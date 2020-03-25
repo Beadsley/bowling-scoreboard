@@ -7,9 +7,12 @@
   padding: 1%;
 }
 
+.container {
+  padding: 5%;
+}
+
 .board-container {
   width: 100%;
-  padding: 20px;
   margin: auto;
 }
 
@@ -21,7 +24,7 @@
 
 table {
   margin: auto;
-  width: 80%;
+  width: 100%;
   border-collapse: collapse;
   border: 1px solid #fff;
   /*for older IE*/
@@ -53,11 +56,16 @@ td {
   height: 30px;
 }
 
-.details {
+.details-container {
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
+}
+
+.name-input-container {
+  display: flex;
+  flex-direction: row;
 }
 
 .add-player-btn {
@@ -66,11 +74,11 @@ td {
   width: 30px;
   height: 30px;
   margin-right: 5px;
-
 }
 
 .name-input {
   height: 20px;
+  width: 200px;
   padding-left: 5px;
   padding-right: 5px;
 }
