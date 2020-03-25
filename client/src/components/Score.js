@@ -5,7 +5,7 @@ import Input from './Input';
 function Score() {
 
   const [buttons, setButtons] = useState([]);
-  const [game, setGame] = useState({ started: false, roll: 0, score: [], frame: 1, frameScore: 0, currentPlayer: { id: undefined, name: undefined } });
+  const [game, setGame] = useState({ started: false, roll: 0, score: [], frame: 1, frameScore: 0, currentPlayer: { id: undefined, name: undefined }, restarted: false });
   const [players, setPlayers] = useState([]);
 
   useEffect(() => {
@@ -174,12 +174,23 @@ function Score() {
 
   }
 
+  function restartGame() {
+    console.log('here');
+    setGame({ started: false, roll: 0, score: [], frame: 1, frameScore: 0, currentPlayer: { id: undefined, name: undefined }, restarted: true });
+    setPlayers([]);
+    setButtons([]);
+  }
+
+  function setRestarted2False() {
+    setGame({ ...game, restarted: false });
+  }
+
   return (
     <div className="container">
       {gameOver() ? "" : buttons}
       <Input {...game} startGame={startGame} addPlayer={addPlayer} players={players} />
-      <Scoreboard {...game} players={players} over={gameOver} />
-      <button style={game.started ? { visibility: "visible" } : { visibility: "hidden" }}>Restart</button>
+      <Scoreboard {...game} players={players} over={gameOver} start={setRestarted2False} />
+      <button style={game.started ? { visibility: "visible" } : { visibility: "hidden" }} onClick={() => restartGame()}>Restart</button>
     </div>
   );
 }

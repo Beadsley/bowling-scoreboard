@@ -11,7 +11,16 @@ function EnterName(game) {
         if (game.players.length !== 0) {
             generateBoard();
         }
+
     }, [game.players, game.currentPlayer]);
+
+    useEffect(() => {
+        
+        if (game.restarted) {
+            setBoards([]);
+            game.start();
+        }
+    }, [game.restarted]);
 
 
     async function fetchPlayer(id) {
@@ -32,7 +41,6 @@ function EnterName(game) {
             let row3 = []
             const result = await fetchPlayer(player.id);
             const { scores, consecutiveScores, totalScore, name } = result.body;
-            console.log('strike', player.frame10Strike, scores.length);
 
             for (let index = 0; index <= 9; index++) {
                 let roll1 = "";
