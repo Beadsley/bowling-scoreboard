@@ -181,6 +181,8 @@ function Score() {
     setButtons([]);
   }
 
+  
+
   function setRestarted2False() {
     setGame({ ...game, restarted: false });
   }

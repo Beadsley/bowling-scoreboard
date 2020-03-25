@@ -95,10 +95,27 @@ const removeAll = function () {
     })
 };
 
+const removeDocument = function (id) {
+
+    return new Promise((resolve, reject) => {
+        const myquery = { _id: new mongodb.ObjectID(id) };
+
+        Scoreboard.deleteOne(myquery, function (err, result) {
+            if (!err) {
+                resolve(result)
+                console.log(`Removed ${id}`);
+            } else {
+                reject(err);
+            }
+        });
+    });
+};
+
 module.exports = {
     getDocument,
     getDocuments,
     insertDocument,
     updateDocument,
-    removeAll
+    removeAll,
+    removeDocument
 }
