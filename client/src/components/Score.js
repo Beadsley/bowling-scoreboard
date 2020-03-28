@@ -10,6 +10,7 @@ function Score() {
   const [players, setPlayers] = useState([]);
 
   useEffect(() => {
+    
 
 
     if (game.started) {
