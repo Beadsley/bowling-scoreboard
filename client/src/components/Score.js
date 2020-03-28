@@ -55,24 +55,14 @@ function Score() {
 
   async function addScore() {
 
-    const response = await fetch(`/api/player/score/${game.currentPlayer.id}`, {
-      method: 'put',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        "roll": game.score
-      })
-    })
-    const result = await response.json()
-    if (result.body.gameOver) {
+    const response = await axios.put(`/api/player/score/${game.currentPlayer.id}`, { "roll": game.score })
+
+    if (response.data.body.gameOver) {
       const currentPlayerIndex = players.findIndex(player => player.id == game.currentPlayer.id);
       players[currentPlayerIndex].gameOver = true;
       setPlayers([...players]);
     }
-
     selectNextPlayer();
-
   }
 
   function selectNextPlayer() {
