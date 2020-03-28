@@ -28,6 +28,8 @@ router.delete('/game', async (req, res) => {
 });
 
 router.delete('/player/:id', async (req, res) => {
+console.log('hereeeeeeeeee');
+
     const id = req.params.id;
     try {
         await removeDocument(id);        

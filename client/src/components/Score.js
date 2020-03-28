@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Scoreboard from './Scoreboard';
 import Input from './Input';
+import axios from "axios";
 
 function Score() {
 
@@ -176,12 +177,17 @@ function Score() {
 
   function restartGame() {
     console.log('here');
+    deletePlayers();
     setGame({ started: false, roll: 0, score: [], frame: 1, frameScore: 0, currentPlayer: { id: undefined, name: undefined }, restarted: true });
     setPlayers([]);
     setButtons([]);
   }
 
-  
+  function deletePlayers() {
+    players.forEach((player) => {
+      axios.delete(`api/player/${player.id}`);
+    })
+  }
 
   function setRestarted2False() {
     setGame({ ...game, restarted: false });
