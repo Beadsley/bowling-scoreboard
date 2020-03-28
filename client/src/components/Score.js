@@ -10,38 +10,21 @@ function Score() {
   const [players, setPlayers] = useState([]);
 
   useEffect(() => {
-    
-
 
     if (game.started) {
-
-      //console.log('frame', game.frame, 'prevframesscore: ', game.frameScore, 'roll: ', game.roll, game.currentPlayer);
-
+      const index = players.findIndex(player => player.id === game.currentPlayer.id);
       if (game.frameScore === 10 && game.roll === 1 && game.frame < 11) {
-        // strike
         setGame({ ...game, roll: game.roll + 1, score: [10, 0] })
       }
-      else if (game.frame === 11) {
-        const index = players.findIndex(player => player.id == game.currentPlayer.id);
-        if (game.roll === 1 && players[index].frame10Strike === false) {
-          // spare 
-          setGame({ ...game, roll: game.roll + 1, score: [game.frameScore, 0] })
-        }
-        else if (players[index].frame10Strike === true) {
-          //strike
-          console.log('strike baby');
-
-        }
+      else if (game.frame === 11 && players[index].frame10Spare === true && game.roll === 1) {
+        setGame({ ...game, roll: game.roll + 1, score: [game.frameScore, 0] })
       }
-
-      if (game.roll === 2) {
+      else if (game.roll === 2) {
         addScore()
       }
       generateScoreButtons();
-
     }
 
-    // eslint-disable-next-line
   }, [game.score, game.started, game.currentPlayer]);
 
   useEffect(() => {
