@@ -1,18 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import Scoreboard from './Scoreboard';
 import Input from './Input';
+import axios from "axios";
 
 function Score() {
 
   const [buttons, setButtons] = useState([]);
-  const [game, setGame] = useState({ started: false, roll: 0, score: [], frame: 1, frameScore: 0, currentPlayer: { id: undefined, name: undefined } });
+  const [game, setGame] = useState({ started: false, roll: 0, score: [], frame: 1, frameScore: 0, currentPlayer: { id: undefined, name: undefined }, restarted: false });
   const [players, setPlayers] = useState([]);
 
   useEffect(() => {
     
 
+
     if (game.started) {
-      
+
       //console.log('frame', game.frame, 'prevframesscore: ', game.frameScore, 'roll: ', game.roll, game.currentPlayer);
 
       if (game.frameScore === 10 && game.roll === 1 && game.frame < 11) {
@@ -174,14 +176,31 @@ function Score() {
 
   }
 
+  function restartGame() {
+    console.log('here');
+    deletePlayers();
+    setGame({ started: false, roll: 0, score: [], frame: 1, frameScore: 0, currentPlayer: { id: undefined, name: undefined }, restarted: true });
+    setPlayers([]);
+    setButtons([]);
+  }
+
+  function deletePlayers() {
+    players.forEach((player) => {
+      axios.delete(`api/player/${player.id}`);
+    })
+  }
+
+  function setRestarted2False() {
+    setGame({ ...game, restarted: false });
+  }
+
   return (
-    <>
-      <div className=".interactivity">
-        {gameOver() ? "" : buttons}
-        <Input {...game} startGame={startGame} addPlayer={addPlayer} players={players} />
-      </div>
-      <Scoreboard {...game} players={players} over={gameOver} />
-    </>
+    <div className="container">
+      {gameOver() ? "" : buttons}
+      <Input {...game} startGame={startGame} addPlayer={addPlayer} players={players} />
+      <Scoreboard {...game} players={players} over={gameOver} start={setRestarted2False} />
+      <button style={game.started ? { visibility: "visible" } : { visibility: "hidden" }} onClick={() => restartGame()}>Restart</button>
+    </div>
   );
 }
 

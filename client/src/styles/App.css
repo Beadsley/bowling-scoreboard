@@ -7,21 +7,25 @@
   padding: 1%;
 }
 
+.container {
+  padding: 5%;
+}
+
 .board-container {
   width: 100%;
-  padding: 20px;
   margin: auto;
 }
 
 .boards-container {
   margin-top: 15px;
+  margin-bottom: 15px;
   display: grid;
   grid-gap: 15px;
 }
 
 table {
   margin: auto;
-  width: 80%;
+  width: 100%;
   border-collapse: collapse;
   border: 1px solid #fff;
   /*for older IE*/
@@ -47,17 +51,17 @@ td {
   text-align: right;
 }
 
-.interactivity {
-  display: grid;
-  min-height: 30px;
-  height: 30px;
-}
 
-.details {
+.details-container {
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
+}
+
+.name-input-container {
+  display: flex;
+  flex-direction: row;
 }
 
 .add-player-btn {
@@ -71,6 +75,7 @@ td {
 
 .name-input {
   height: 20px;
+  width: 200px;
   padding-left: 5px;
   padding-right: 5px;
 }

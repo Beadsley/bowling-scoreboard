@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { addScore } = require('../evalScore.js');
-const { getDocument, getDocuments, removeAll, insertDocument, updateDocument } = require('../models/dbhelper.js');
+const { getDocument, getDocuments, removeAll, insertDocument, updateDocument, removeDocument } = require('../models/dbhelper.js');
 
 
 router.get('/players', async(req, res) => {
@@ -22,6 +22,21 @@ router.delete('/game', async (req, res) => {
         res.status(204).end();
     }
     catch (err) {
+        res.status(400).send({ message: err }); //maybe not 400
+    }
+    
+});
+
+router.delete('/player/:id', async (req, res) => {
+console.log('hereeeeeeeeee');
+
+    const id = req.params.id;
+    try {
+        await removeDocument(id);        
+        res.status(204).end();
+    }
+    catch (err) {
+        
         res.status(400).send({ message: err }); //maybe not 400
     }
     

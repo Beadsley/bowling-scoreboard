@@ -28,23 +28,24 @@ function Input(game) {
     }
 
     return (
-        <>
-            <div className="details">
-                <button className="add-player-btn" onClick={() => userInput.length !== 0 ? createPlayer(userInput) : alert.show('enter a name...')}
-                    style={game.started ? { visibility: "hidden" } : { visibility: "visible" }}>
+
+        <div className="details-container" style={game.started ? { visibility: "hidden" } : { visibility: "visible" }}>
+            <div className="name-input-container">
+                <button className="add-player-btn" onClick={() => userInput.length !== 0 ? createPlayer(userInput) : alert.show('enter a name...')}>
                     <i className="material-icons">add</i>
                 </button>
-                <form style={game.started ? { visibility: "hidden" } : { visibility: "visible" }} onChange={handleUserInput} onSubmit={(e) => {
+                <form onChange={handleUserInput} onSubmit={(e) => {
                     e.preventDefault();
                     createPlayer(userInput)
                 }}>
                     <input className="name-input" type="text" name="name" id="nameInput" required placeholder="Add a player..."
                         autoComplete="off" maxLength="10 " />
                 </form>
-                <button className="start-game-btn" style={game.started ? { visibility: "hidden" } : { visibility: "visible" }}
-                    onClick={game.players.length !== 0 ? game.startGame : () => { alert.show('add a player...') }}>Start game</button>
             </div>
-        </>
+            <button className="start-game-btn"
+                onClick={game.players.length !== 0 ? game.startGame : () => { alert.show('add a player...') }}>Start game</button>
+        </div>
+
     )
 }
 
