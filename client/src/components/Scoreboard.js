@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import '../styles/App.css';
 
 function EnterName(game) {
+    
 
     const [boards, setBoards] = useState([]);
 
@@ -12,15 +13,14 @@ function EnterName(game) {
             generateBoard();
         }
 
-    }, [game.players, game.currentPlayer]);
+    }, [game.players, game.currentPlayer, game.scoreAdded]);
 
     useEffect(() => {
         
-        if (game.restarted) {
+        if (game.restart) {
             setBoards([]);
-            game.start();
         }
-    }, [game.restarted]);
+    }, [game.restart]);
 
 
     async function fetchPlayer(id) {
@@ -33,7 +33,8 @@ function EnterName(game) {
 
 
     function generateBoard() {
-
+        
+        
         game.players.forEach(async (player, index) => {
 
             let row1 = []
@@ -41,7 +42,7 @@ function EnterName(game) {
             let row3 = []
             const result = await fetchPlayer(player.id);
             const { scores, consecutiveScores, totalScore, name } = result.body;
-
+            
             for (let index = 0; index <= 9; index++) {
                 let roll1 = "";
                 let roll2 = "";
@@ -55,7 +56,7 @@ function EnterName(game) {
                     }
                 }
                 row1.push(<th>{index + 1}</th>)
-                row2.push(game.frame === 11 && scores.length === 11 && index === 9 && (player.frame10Spare === true || player.frame10Strike === true) ?
+                row2.push(game.frame === 11 && scores.length === 11 && index === 9 && player.frame10 !== 'nothing' ?
                     <td>{roll1}:{scores[10][0]}:{scores[10][1]}</td> :
                     <td>{roll1}:{roll2}</td>)
                 row3.push(<td>{consecutiveScore}</td>)
@@ -63,7 +64,7 @@ function EnterName(game) {
             }
             row1.unshift(<th className="column1-header"></th>)
             row1.push(<th className="column1-header">total</th>)
-            row2.unshift(<th style={player.id === game.currentPlayer.id && !game.over() ? { color: "white", "font-size": "large" } : { "font-size": "large" }} className="column1-header">{name}</th>)
+            row2.unshift(<th style={player.id === game.currentPlayer.id && !game.finished ? { color: "white", "font-size": "large" } : { "font-size": "large" }} className="column1-header">{name}</th>)
             row2.push(<td>{totalScore}</td>)
             row3.unshift(<th className="column1-header"></th>)
             row3.push(<td></td>)
@@ -83,8 +84,8 @@ function EnterName(game) {
 
     return (
         <>
-            <h2>{game.currentPlayer && !game.over() && game.started ? game.currentPlayer.name + " your up!" : ""} </h2>
-            <h2>{game.over() && game.started ? "its all over!" : ""} </h2>
+            <h2>{game.currentPlayer && !game.finished && game.started ? game.currentPlayer.name + " your up!" : ""} </h2>
+            <h2>{game.finished && game.started ? "its all over!" : ""} </h2>
             <div className="boards-container">
                 {boards.map(board => <div className="board-container">{board.score}</div>)}
             </div>
