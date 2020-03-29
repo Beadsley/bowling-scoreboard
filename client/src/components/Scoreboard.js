@@ -22,6 +22,14 @@ function EnterName(game) {
         }
     }, [game.restart]);
 
+    useEffect(() => {
+        
+        if (game.restarted) {
+            setBoards([]);
+            game.start();
+        }
+    }, [game.restarted]);
+
 
     async function fetchPlayer(id) {
 
