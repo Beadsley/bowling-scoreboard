@@ -2,15 +2,6 @@
   font-family: 'Baloo 2', cursive;
 }
 
-.App {
-  text-align: center;
-  padding: 1%;
-}
-
-.container {
-  padding: 5%;
-}
-
 .board-container {
   width: 100%;
   margin: auto;
@@ -22,65 +13,27 @@
   display: grid;
   grid-gap: 15px;
 }
-
-table {
-  margin: auto;
-  width: 100%;
-  border-collapse: collapse;
-  border: 1px solid #fff;
-  /*for older IE*/
-  border-style: hidden;
+.container {
+  padding: 5%;
+  text-align: center;
 }
 
-th {
-  padding: 8px;
-  background-color: #63ccff;
-  font-size: medium;
-  width: 60px;
+.form-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
-.column1-header {
-  min-width: 120px;
-}
-
-td {
-  padding: 3px;
-  border-width: 1px;
-  border-style: solid;
-  border-color: #006db3 #ccc;
-  text-align: right;
-}
-
-
-.details-container {
+.input-container {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
 }
 
-.name-input-container {
+.pins-container{
   display: flex;
+  justify-content: center;
   flex-direction: row;
 }
 
-.add-player-btn {
-  display: flex;
-  justify-content: center;
-  width: 30px;
-  height: 30px;
-  margin-right: 5px;
-
-}
-
-.name-input {
-  height: 20px;
-  width: 200px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-.start-game-btn {
-  padding-left: 5px;
-  margin-left: 5px;
-}

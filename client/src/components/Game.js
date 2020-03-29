@@ -2,10 +2,22 @@ import React, { useState, useEffect } from 'react';
 import axios from "axios";
 import Pins from './Pins';
 import Players from './Players';
+import Button from '@material-ui/core/Button';
+import { makeStyles } from '@material-ui/core/styles';
+import Icon from '@material-ui/core/Icon';
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+      '& > *': {
+          margin: theme.spacing(1),
+      },
+  },
+}));
 
 function Game() {
 
-  const [game, setGame] = useState({ started: false, roll: 0, score: [], frame: 1, frameScore: 0, currentPlayer: { id: undefined, name: undefined, frame10: "nothing" }, restarted: false, finished: false, scoreAdded: false });
+  const [game, setGame] = useState({ started: false, roll: 0, score: [], frame: 1, frameScore: 0, currentPlayer: { id: undefined, name: undefined, frame10: "nothing" }, restart: false, finished: false, scoreAdded: false });
+  const classes = useStyles();
 
   useEffect(() => {
 
@@ -56,9 +68,19 @@ function Game() {
 
   return (
     <div className="container">
-      {game.finished ? "" : <Pins {...game} update={updateAfterRoll}></Pins>}
+      {game.finished || !game.started ? "" : <Pins {...game} update={updateAfterRoll}></Pins>}
       <Players {...game} startGame={startGame} update={updateGame} ></Players>
-      <button style={game.started ? { visibility: "visible" } : { visibility: "hidden" }} onClick={() => setGame({ ...game, restart: true })}>Restart</button>
+      <Button
+        style={game.started ? { visibility: "visible" } : { visibility: "hidden" }}
+        variant="contained"
+        color="primary"
+        className={classes.button}
+        endIcon={<Icon>autorenew</Icon>}
+        onClick={() => setGame({ ...game, restart: true })}>
+        Restart
+      </Button>
+
+      {/* <button style={game.started ? { visibility: "visible" } : { visibility: "hidden" }} onClick={() => setGame({ ...game, restart: true })}>Restart</button> */}
     </div>
   );
 }
