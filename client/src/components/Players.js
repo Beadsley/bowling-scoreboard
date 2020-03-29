@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Input from './Input';
+import InputPlayer from './InputPlayer';
 import Scoreboard from './Scoreboard';
 import axios from "axios";
 
@@ -109,7 +109,7 @@ function Players(game) {
 
   return (
     <div>
-      <Input {...game} addPlayer={addPlayer} players={players} />
+      <InputPlayer {...game} addPlayer={addPlayer} players={players} />
       <Scoreboard {...game} players={players} />
     </div>
   )
