@@ -56,6 +56,7 @@ function Board(player) {
     const useStyles = makeStyles(theme => ({
         table: {
             minWidth: 650,
+            tableLayout:'fixed',
         },
         header: {
             backgroundColor: theme.palette.secondary.main,
@@ -71,9 +72,12 @@ function Board(player) {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-evenly'
+        },
+        score: {
+            overflow: "hidden",
         }
     }));
-
+    const classes = useStyles();
     let scores = [];
     let consecutiveScores = [];
     for (let index = 0; index <= 9; index++) {
@@ -89,11 +93,9 @@ function Board(player) {
         }
         scores.push(player.frame === 11 && player.scores.length === 11 && index === 9 && player.frame10 !== 'nothing' ?
             <TableCell align="right">{roll1}:{player.scores[10][0]}:{player.scores[10][1]}</TableCell> :
-            <TableCell align="right">{roll1}:{roll2}</TableCell>)
-        consecutiveScores.push(<TableCell align="right">{consecutiveScore}</TableCell>)
+            <TableCell align="right" className={classes.score}>{roll1}:{roll2}</TableCell>)
+        consecutiveScores.push(<TableCell align="right" className={classes.score}>{consecutiveScore}</TableCell>)
     }
-
-    const classes = useStyles();
 
     const table = (
         <TableContainer component={Paper}>
@@ -115,7 +117,7 @@ function Board(player) {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    <TableRow key={player.name} >
+                    <TableRow key={player.name}>
                         <TableCell component="th" scope="row" className={`${classes.header} ${classes.name}`}>
                             {player.isPlaying ? <><Icon>send</Icon>{player.name}</> : player.name}
                         </TableCell>
