@@ -11,7 +11,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Pins(game) {
-
     const [buttons, setButtons] = useState([]);
     const classes = useStyles();
 
