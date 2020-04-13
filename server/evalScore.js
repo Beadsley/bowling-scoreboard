@@ -49,7 +49,7 @@ const checkEndOfGame = (player) => {
 
     if (frames === 10 && !spare && strikeTotal === 0) {
         player.body.gameOver = true;
-    } // ! TODO perhaps just have else if frames > 11 gameover
+    }
     else if (frames === 11 && spare && strikeTotal === 0) {
         player.body.gameOver = true;
     }

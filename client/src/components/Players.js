@@ -8,7 +8,7 @@ function Players(game) {
 
   useEffect(() => {
     if (game.started) {
-      selectPlayer()
+      selectPlayer();
     }
   }, [game.started])
 
@@ -26,9 +26,13 @@ function Players(game) {
 
   useEffect(() => {
     if (game.started) {
-      deletePlayers()
+      deletePlayers();
     }
   }, [game.restart])
+
+  window.onbeforeunload = () => {
+    deletePlayers();
+  };
 
   function addPlayer(id, name) {
     const player = {
@@ -62,16 +66,12 @@ function Players(game) {
   }
 
   function deletePlayers() {
-
     players.forEach((player) => {
       axios.delete(`api/player/${player.id}`);
     })
-
     game.update({ started: false, roll: 0, score: [], frame: 1, frameScore: 0, currentPlayer: { id: undefined, name: undefined, frame10: "nothing" }, restarted: false, finished: false, scoreAdded: false });
     setPlayers([]);
-
   }
-
 
   function evalFrame() {
     const currentPlayerIndex = players.findIndex(player => player.id == game.currentPlayer.id);

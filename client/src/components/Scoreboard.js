@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axios from "axios";
 import '../styles/App.css';
 import { makeStyles } from '@material-ui/core/styles';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Icon } from '@material-ui/core';
@@ -41,7 +42,7 @@ function Scoreboard(game) {
     }, [game.players]);
 
     useEffect(() => {
-        if(game.started){            
+        if (game.started) {
             generateBoards();
         }
     }, [game.currentPlayer, game.finished]);
@@ -53,12 +54,12 @@ function Scoreboard(game) {
     }, [game.restart]);
 
     async function fetchPlayer(id) {
-        const response = await fetch(`/api/player/${id}`)
-        const result = await response.json();
+        const response = await axios.get(`/api/player/${id}`)
+        const result = await response.data;
         return result;
     }
 
-    function generateBoards() {        
+    function generateBoards() {
         game.players.forEach(async (player, index) => {
 
             if (game.started) {
@@ -78,9 +79,9 @@ function Scoreboard(game) {
     return (
         <>
             <h2>{game.currentPlayer && !game.finished && game.started ? game.currentPlayer.name + " your up!" : ""} </h2>
-            <h2>{game.finished && game.started ? "its all over!" : ""} </h2>
+            <h2>{game.finished && game.started ? "It's all over!" : ""} </h2>
             <div className="boards-container">
-                {boards.map(board => <div className="board-container">{board.score}</div>)}
+                {boards.map((board, i) => <div key={i} className="board-container">{board.score}</div>)}
             </div>
         </>
     );
@@ -116,23 +117,23 @@ function useScores(player) {
             scores.push(<TableCell className={classes.roll} align="right">{roll1}</TableCell>);
             scores.push(<TableCell className={classes.roll} align="center">{frame10roll1 === 10 ? "X" : frame10roll1}</TableCell>);
             scores.push(<TableCell className={classes.roll} align="left">{frame10roll2 === 10 ? "X" : frame10roll2}</TableCell>);
-            consecutiveScores.push(<TableCell align="center" colspan="3">{consecutiveScore}</TableCell>);
+            consecutiveScores.push(<TableCell align="center" colSpan="3">{consecutiveScore}</TableCell>);
         }
         else if (frame10extraRoll && player.frame10 === 'spare') {
             scores.push(<TableCell className={classes.roll} align="right">{roll1}</TableCell>);
             scores.push(<TableCell className={classes.roll} align="center">{roll2}</TableCell>);
             scores.push(<TableCell className={classes.roll} align="left">{player.scoreboardScores[10][0]}</TableCell>);
-            consecutiveScores.push(<TableCell align="center" colspan="3">{consecutiveScore}</TableCell>);
+            consecutiveScores.push(<TableCell align="center" colSpan="3">{consecutiveScore}</TableCell>);
         }
         else if (index === 9) {
             scores.push(<TableCell className={classes.roll} align="right">{roll1}</TableCell>);
             scores.push(<TableCell className={classes.roll} align="left">{roll2}</TableCell>);
             scores.push(<TableCell className={classes.roll} align="center"></TableCell>);
-            consecutiveScores.push(<TableCell align="center" colspan="3">{consecutiveScore}</TableCell>);
+            consecutiveScores.push(<TableCell align="center" colSpan="3">{consecutiveScore}</TableCell>);
         } else {
             scores.push(<TableCell className={classes.roll} align="right">{roll1}</TableCell>);
             scores.push(<TableCell className={classes.roll} align="left">{roll2}</TableCell>);
-            consecutiveScores.push(<TableCell align="center" colspan="2">{consecutiveScore}</TableCell>);
+            consecutiveScores.push(<TableCell align="center" colSpan="2">{consecutiveScore}</TableCell>);
         }
     }
     return {
@@ -144,35 +145,35 @@ function useScores(player) {
 function Board(player) {
     const classes = useStyles();
     const { scores, consecutiveScores } = useScores(player);
-
+    
     const table = (
         <TableContainer component={Paper}>
             <Table className={classes.table} aria-label="simple table">
                 <TableHead>
                     <TableRow className={classes.header}>
                         <TableCell className={classes.header}>Name </TableCell>
-                        <TableCell className={classes["frame-header"]} align="center" colspan="2">1</TableCell>
-                        <TableCell className={classes["frame-header"]} align="center" colspan="2">2</TableCell>
-                        <TableCell className={classes["frame-header"]} align="center" colspan="2">3</TableCell>
-                        <TableCell className={classes["frame-header"]} align="center" colspan="2">4</TableCell>
-                        <TableCell className={classes["frame-header"]} align="center" colspan="2">5</TableCell>
-                        <TableCell className={classes["frame-header"]} align="center" colspan="2">6</TableCell>
-                        <TableCell className={classes["frame-header"]} align="center" colspan="2">7</TableCell>
-                        <TableCell className={classes["frame-header"]} align="center" colspan="2">8</TableCell>
-                        <TableCell className={classes["frame-header"]} align="center" colspan="2">9</TableCell>
-                        <TableCell className={classes["frame-header"]} align="center" colspan="3">10</TableCell>
+                        <TableCell className={classes["frame-header"]} align="center" colSpan="2">1</TableCell>
+                        <TableCell className={classes["frame-header"]} align="center" colSpan="2">2</TableCell>
+                        <TableCell className={classes["frame-header"]} align="center" colSpan="2">3</TableCell>
+                        <TableCell className={classes["frame-header"]} align="center" colSpan="2">4</TableCell>
+                        <TableCell className={classes["frame-header"]} align="center" colSpan="2">5</TableCell>
+                        <TableCell className={classes["frame-header"]} align="center" colSpan="2">6</TableCell>
+                        <TableCell className={classes["frame-header"]} align="center" colSpan="2">7</TableCell>
+                        <TableCell className={classes["frame-header"]} align="center" colSpan="2">8</TableCell>
+                        <TableCell className={classes["frame-header"]} align="center" colSpan="2">9</TableCell>
+                        <TableCell className={classes["frame-header"]} align="center" colSpan="3">10</TableCell>
                         <TableCell className={classes.header} align="right">Total</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    <TableRow key={player.name}>
+                    <TableRow>
                         <TableCell component="th" scope="row" className={`${classes.header} ${classes.name}`}>
                             {player.isPlaying ? <><Icon>send</Icon>{player.name}</> : player.name}
                         </TableCell>
                         {scores}
                         <TableCell align="right">{player.totalScore}</TableCell>
                     </TableRow>
-                    <TableRow key={player.name}>
+                    <TableRow>
                         <TableCell component="th" scope="row" className={classes.header}></TableCell>
                         {consecutiveScores}
                     </TableRow>

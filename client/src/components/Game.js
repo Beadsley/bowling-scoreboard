@@ -7,9 +7,9 @@ import Icon from '@material-ui/core/Icon';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-      '& > *': {
-          margin: theme.spacing(1),
-      },
+    '& > *': {
+      margin: theme.spacing(1),
+    },
   },
 }));
 
@@ -38,7 +38,6 @@ function Game() {
 
   async function addScore() {
     const response = await axios.put(`/api/player/score/${game.currentPlayer.id}`, { "roll": game.score });
-
     if (response.status === 200) {
       setGame({ ...game, scoreAdded: true });
     }
