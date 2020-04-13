@@ -1,17 +1,13 @@
 import React from 'react';
 import './styles/App.css';
 import Game from './components/Game';
-import { makeStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
+import { makeStyles, AppBar, Toolbar, Typography, IconButton, MuiThemeProvider, createMuiTheme } from '@material-ui/core/';
 import MenuIcon from '@material-ui/icons/Menu';
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';  
 
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
+    minWidth:1200,
   },
   menuButton: {
     marginRight: theme.spacing(2),
@@ -29,7 +25,7 @@ const theme = createMuiTheme({
         dark: '#000'
      },
      secondary: {
-       main: '#0091ea',
+       main: '#58a5f0',
      },
   },
   typography: { 
@@ -39,11 +35,9 @@ const theme = createMuiTheme({
 
 
 function App() {
-
   const classes = useStyles();
 
   return (
-
     <div className={classes.root}>
       <MuiThemeProvider theme = { theme }>
       <AppBar position="static">
@@ -59,7 +53,6 @@ function App() {
       <Game />
       </MuiThemeProvider>
     </div>
-
   );
 }
 

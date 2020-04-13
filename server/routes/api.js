@@ -101,7 +101,7 @@ router.put('/player/score/:id', async (req, res) => {
         const { frames, gameOver } = player.body;
         const valid = validation(score, frames);
         if (valid && !gameOver) {
-            const updatedPlayer = await addScore(score, id, player);
+            const updatedPlayer = await addScore(score, player);
             await updateDocument(id, updatedPlayer);
             res.json(updatedPlayer);
         }

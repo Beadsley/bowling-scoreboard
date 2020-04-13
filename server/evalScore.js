@@ -1,6 +1,4 @@
-const addScore = async (rolls, id, player) => {
-
-
+const addScore = async (rolls, player) => {
     if (player.body.strikeTotal >= 2) {
         const index = player.body.scores.length - 2;
         player.body.scores.splice(index, 1, [30]);
@@ -28,6 +26,7 @@ const addScore = async (rolls, id, player) => {
     }
     
     player.body.scores.push(rolls);
+    player.body.scoreboardScores.push(rolls);
     const totalScore = totalBowlingScore(player.body.scores);
     player.body.consecutiveScores.push(totalScore);
     player.body.totalScore = totalScore;
@@ -39,11 +38,9 @@ const addScore = async (rolls, id, player) => {
 }
 
 const totalBowlingScore = (rollsArray) => {
-
     const totalScore = rollsArray
         .flat()
         .reduce((accumulator, currentValue) => accumulator + currentValue);
-
     return totalScore;
 }
 
@@ -62,10 +59,8 @@ const checkEndOfGame = (player) => {
     else if (frames >= 11) {
         player.body.gameOver = true;
     }
-
     return player;
 }
-
 
 module.exports = {
     addScore,

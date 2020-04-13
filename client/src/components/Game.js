@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from "axios";
 import Pins from './Pins';
 import Players from './Players';
-import Button from '@material-ui/core/Button';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, Button } from '@material-ui/core/';
 import Icon from '@material-ui/core/Icon';
 
 const useStyles = makeStyles((theme) => ({
@@ -15,14 +14,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Game() {
-
   const [game, setGame] = useState({ started: false, roll: 0, score: [], frame: 1, frameScore: 0, currentPlayer: { id: undefined, name: undefined, frame10: "nothing" }, restart: false, finished: false, scoreAdded: false });
   const classes = useStyles();
 
   useEffect(() => {
-
     if (game.started) {
-
       if (game.frameScore === 10 && game.roll === 1 && game.frame < 11) {
         setGame({ ...game, roll: game.roll + 1, score: [10, 0] });
       }
@@ -41,17 +37,14 @@ function Game() {
   }
 
   async function addScore() {
-
     const response = await axios.put(`/api/player/score/${game.currentPlayer.id}`, { "roll": game.score });
 
     if (response.status === 200) {
       setGame({ ...game, scoreAdded: true });
     }
-
   }
 
   function updateAfterRoll(pin) {
-
     setGame({
       ...game,
       roll: game.roll + 1,
@@ -61,9 +54,7 @@ function Game() {
   }
 
   function updateGame(updatedValue) {
-
-    setGame(updatedValue)
-
+    setGame(updatedValue);
   }
 
   return (
@@ -79,8 +70,6 @@ function Game() {
         onClick={() => setGame({ ...game, restart: true })}>
         Restart
       </Button>
-
-      {/* <button style={game.started ? { visibility: "visible" } : { visibility: "hidden" }} onClick={() => setGame({ ...game, restart: true })}>Restart</button> */}
     </div>
   );
 }
