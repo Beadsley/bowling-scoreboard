@@ -42,6 +42,7 @@ const insertDocument = function (name) {
                 name: name,
                 scores: [],
                 consecutiveScores: [],
+                scoreboardScores: [],
                 spare: false,
                 strikeTotal: 0,
                 frames: 1,
