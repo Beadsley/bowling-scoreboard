@@ -8,9 +8,15 @@ function Scoreboard(game) {
 
     useEffect(() => {
         if (game.players.length !== 0) {
-            generateBoard();
+            generateBoards();
         }
-    }, [game.players, game.currentPlayer, game.scoreAdded]);
+    }, [game.players]);
+
+    useEffect(() => {
+        if (game.scoreAdded==true) {
+            generateBoards();
+        }
+    }, [game.scoreAdded]);
 
     useEffect(() => {
         if (game.restart) {
@@ -24,7 +30,7 @@ function Scoreboard(game) {
         return result;
     }
 
-    function generateBoard() {
+    function generateBoards() {
         game.players.forEach(async (player, index) => {
 
             if (game.started) {
@@ -55,14 +61,15 @@ function Scoreboard(game) {
 function Board(player) {
     const useStyles = makeStyles(theme => ({
         table: {
-            minWidth: 650,
-            tableLayout:'fixed',
+            minWidth: 1000,
+            tableLayout: 'fixed',
         },
         header: {
             backgroundColor: theme.palette.secondary.main,
             color: 'white',
             fontWeight: 900,
             width: 100,
+            height: 30,
         },
         'frame-header': {
             color: 'white',
@@ -73,28 +80,57 @@ function Board(player) {
             alignItems: 'center',
             justifyContent: 'space-evenly'
         },
-        score: {
-            overflow: "hidden",
+        roll: {
+            borderWidth: ' 0.0625rem',
+            borderStyle: 'solid',
+            borderColor: `${theme.palette.secondary.main} #ccc`
         }
     }));
+
     const classes = useStyles();
     let scores = [];
     let consecutiveScores = [];
     for (let index = 0; index <= 9; index++) {
+        const frame10extraRoll = player.frame === 11 && player.scoreboardScores.length === 11 && index === 9 && player.frame10 !== 'nothing';
         let roll1 = "";
         let roll2 = "";
         let consecutiveScore = ".";
-        if (player.scores !== undefined) {
-            if (index < player.scores.length) {
-                roll1 = player.scores[index][0]
-                roll2 = player.scores[index][1]
+        if (player.scoreboardScores !== undefined) {
+            if (index < player.scoreboardScores.length) {
+                roll1 = player.scoreboardScores[index][0]
+                roll2 = player.scoreboardScores[index][1]
                 consecutiveScore = player.consecutiveScores[index]
+                if (roll1 === 10) {
+                    roll1 = "X";
+                    roll2 = "";
+                }
+                else if (roll1 + roll2 === 10) {
+                    roll2 = `/`
+                }
             }
         }
-        scores.push(player.frame === 11 && player.scores.length === 11 && index === 9 && player.frame10 !== 'nothing' ?
-            <TableCell align="right">{roll1}:{player.scores[10][0]}:{player.scores[10][1]}</TableCell> :
-            <TableCell align="right" className={classes.score}>{roll1}:{roll2}</TableCell>)
-        consecutiveScores.push(<TableCell align="right" className={classes.score}>{consecutiveScore}</TableCell>)
+
+        if (frame10extraRoll && player.frame10 === 'strike') {
+            const frame10roll1 = player.scoreboardScores[10][0];
+            const frame10roll2 = player.scoreboardScores[10][1];
+            scores.push(<TableCell className={classes.roll} align="right">{roll1}</TableCell>);
+            scores.push(<TableCell className={classes.roll} align="center">{frame10roll1 === 10 ? "X" : frame10roll1}</TableCell>);
+            scores.push(<TableCell className={classes.roll} align="left">{frame10roll2 === 10 ? "X" : frame10roll2}</TableCell>);
+        }
+        else if (frame10extraRoll && player.frame10 === 'spare') {
+            scores.push(<TableCell className={classes.roll} align="right">{roll1}</TableCell>);
+            scores.push(<TableCell className={classes.roll} align="center">{roll2}</TableCell>);
+            scores.push(<TableCell className={classes.roll} align="left">{player.scoreboardScores[10][0]}</TableCell>);
+        }
+        else if (index === 9) {
+            scores.push(<TableCell className={classes.roll} align="right">{roll1}</TableCell>);
+            scores.push(<TableCell className={classes.roll} align="left">{roll2}</TableCell>);
+            scores.push(<TableCell className={classes.roll} align="center"></TableCell>);
+        } else {
+            scores.push(<TableCell className={classes.roll} align="right">{roll1}</TableCell>);
+            scores.push(<TableCell className={classes.roll} align="left">{roll2}</TableCell>);
+        }
+        consecutiveScores.push(index === 9 ? <TableCell align="center" colspan="3">{consecutiveScore}</TableCell> : <TableCell align="center" colspan="2">{consecutiveScore}</TableCell>)
     }
 
     const table = (
@@ -103,16 +139,16 @@ function Board(player) {
                 <TableHead>
                     <TableRow className={classes.header}>
                         <TableCell className={classes.header}>Name </TableCell>
-                        <TableCell className={classes["frame-header"]} align="right">1</TableCell>
-                        <TableCell className={classes["frame-header"]} align="right">2</TableCell>
-                        <TableCell className={classes["frame-header"]} align="right">3</TableCell>
-                        <TableCell className={classes["frame-header"]} align="right">4</TableCell>
-                        <TableCell className={classes["frame-header"]} align="right">5</TableCell>
-                        <TableCell className={classes["frame-header"]} align="right">6</TableCell>
-                        <TableCell className={classes["frame-header"]} align="right">7</TableCell>
-                        <TableCell className={classes["frame-header"]} align="right">8</TableCell>
-                        <TableCell className={classes["frame-header"]} align="right">9</TableCell>
-                        <TableCell className={classes["frame-header"]} align="right">10</TableCell>
+                        <TableCell className={classes["frame-header"]} align="center" colspan="2">1</TableCell>
+                        <TableCell className={classes["frame-header"]} align="center" colspan="2">2</TableCell>
+                        <TableCell className={classes["frame-header"]} align="center" colspan="2">3</TableCell>
+                        <TableCell className={classes["frame-header"]} align="center" colspan="2">4</TableCell>
+                        <TableCell className={classes["frame-header"]} align="center" colspan="2">5</TableCell>
+                        <TableCell className={classes["frame-header"]} align="center" colspan="2">6</TableCell>
+                        <TableCell className={classes["frame-header"]} align="center" colspan="2">7</TableCell>
+                        <TableCell className={classes["frame-header"]} align="center" colspan="2">8</TableCell>
+                        <TableCell className={classes["frame-header"]} align="center" colspan="2">9</TableCell>
+                        <TableCell className={classes["frame-header"]} align="center" colspan="3">10</TableCell>
                         <TableCell className={classes.header} align="right">Total</TableCell>
                     </TableRow>
                 </TableHead>
