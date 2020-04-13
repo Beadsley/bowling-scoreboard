@@ -3,56 +3,34 @@ const router = express.Router();
 const { addScore } = require('../evalScore.js');
 const { getDocument, getDocuments, removeAll, insertDocument, updateDocument, removeDocument } = require('../models/dbhelper.js');
 
-
-router.get('/players', async(req, res) => {
-
+router.get('/players', async (req, res) => {
     try {
-        const players = await getDocuments()
+        const players = await getDocuments();
         res.status(200).json(players);
-    }
-    catch (err) {
-        res.status(400).send({ message: err }); //maybe not 400
+    } catch (err) {
+        res.status(400).send({ message: err }); 
     }
 });
-
-router.delete('/game', async (req, res) => {
-
-    try {
-        await removeAll()
-        res.status(204).end();
-    }
-    catch (err) {
-        res.status(400).send({ message: err }); //maybe not 400
-    }
-    
-});
-
-router.delete('/player/:id', async (req, res) => {
-
-    const id = req.params.id;
-    try {
-        await removeDocument(id);        
-        res.status(204).end();
-    }
-    catch (err) {
-        
-        res.status(400).send({ message: err }); //maybe not 400
-    }
-    
-});
-
 
 router.get('/player/:id', async (req, res) => {
     const id = req.params.id;
     try {
         const player = await getDocument(id);
         res.json(player);
-    }
-    catch (err) {
+    } catch (err) {
         res.status(400).send({ error: `player with id: [${id}] doesn\'t exist` });
     }
+});
 
-})
+router.delete('/player/:id', async (req, res) => {
+    const id = req.params.id;
+    try {
+        await removeDocument(id);
+        res.status(204).end();
+    } catch (err) {
+        res.status(400).send({ message: err }); 
+    }
+});
 
 /**
  * Creates a player. a name has to be specified in the
@@ -63,21 +41,16 @@ router.get('/player/:id', async (req, res) => {
  *  }
  */
 router.post('/player', async (req, res) => {
-
     const name = req.body.name;
-
     if (name === undefined) {
         res.status(400).send({ error: `must be in the format {name:'charlie'}` });
     }
-
     try {
         const player = await insertDocument(name);
         res.json(player);
-    }
-    catch (err) {
+    } catch (err) {
         res.status(400).send({ error: err });
     }
-
 });
 
 /**
@@ -92,25 +65,21 @@ router.post('/player', async (req, res) => {
  * 
  */
 router.put('/player/score/:id', async (req, res) => {
-
     const id = req.params.id;
     const score = req.body.roll;
-    
     try {
-        let player = await getDocument(id);        
+        let player = await getDocument(id);
         const { frames, gameOver } = player.body;
         const valid = validation(score, frames);
         if (valid && !gameOver) {
-            const updatedPlayer = await addScore(score, id, player);
+            const updatedPlayer = await addScore(score, player);
             await updateDocument(id, updatedPlayer);
             res.json(updatedPlayer);
         }
         else {
             res.status(400).send({ error: 'Game over' });
         }
-
-    }
-    catch (err) {         
+    } catch (err) {
         if (err.kind === "ObjectId") {
             res.status(400).send({ error: `player with id: [${id}] doesn\'t exist` });
         } else {
@@ -121,7 +90,7 @@ router.put('/player/score/:id', async (req, res) => {
 
 const validation = (scores, _frame) => {
     if (!Array.isArray(scores)) {
-        throw new Error('`request body must contain {roll: [roll_1, roll_2]}`');        
+        throw new Error('`request body must contain {roll: [roll_1, roll_2]}`');
     }
     else if (scores.length !== 2) {
         throw new Error('array should contain 2 arguments');
@@ -140,5 +109,4 @@ const validation = (scores, _frame) => {
     }
 }
 
-module.exports.validation = validation;
 module.exports = router;
