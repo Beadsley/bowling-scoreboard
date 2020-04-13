@@ -16,7 +16,6 @@
     "everything": "concurrently -n 'sever,client' -c 'red,green' \"npm run dev\" \"npm run client\""
   },
   "keywords": [],
-  "author": "Jakob Leczinsky",
   "license": "MIT",
   "devDependencies": {
     "eslint": "^6.6.0",

@@ -35,14 +35,14 @@ const addScore = async (rolls, player) => {
 
     player.body.frames += 1;
     return player;
-}
+};
 
 const totalBowlingScore = (rollsArray) => {
     const totalScore = rollsArray
         .flat()
         .reduce((accumulator, currentValue) => accumulator + currentValue);
     return totalScore;
-}
+};
 
 const checkEndOfGame = (player) => {
     const { frames, spare, strikeTotal } = player.body
@@ -60,7 +60,7 @@ const checkEndOfGame = (player) => {
         player.body.gameOver = true;
     }
     return player;
-}
+};
 
 module.exports = {
     addScore,

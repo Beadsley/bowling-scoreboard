@@ -10,25 +10,25 @@ function Players(game) {
     if (game.started) {
       selectPlayer();
     }
-  }, [game.started])
+  }, [game.started]);
 
   useEffect(() => {
     if (game.scoreAdded === true) {
       selectNextPlayer();
     }
-  }, [game.scoreAdded])
+  }, [game.scoreAdded]);
 
   useEffect(() => {
     if (game.frame >= 10 && game.roll === 2) {
       evalFrame();
     }
-  }, [game.score])
+  }, [game.score]);
 
   useEffect(() => {
     if (game.started) {
       deletePlayers();
     }
-  }, [game.restart])
+  }, [game.restart]);
 
   window.onbeforeunload = () => {
     deletePlayers();

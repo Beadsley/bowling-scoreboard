@@ -7,7 +7,7 @@ const ScoreboardSchema = new Schema({
         type: String,
         default: Date.now()
     }
-})
+});
 
 const Scoreboard = mongoose.model('Scoreboard', ScoreboardSchema);
 

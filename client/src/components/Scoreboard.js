@@ -35,7 +35,6 @@ const useStyles = makeStyles(theme => ({
 function Scoreboard(game) {
     const [boards, setBoards] = useState([]);
 
-
     useEffect(() => {
         if (game.players.length !== 0) {
             generateBoards();
@@ -55,7 +54,7 @@ function Scoreboard(game) {
     }, [game.restart]);
 
     async function fetchPlayer(id) {
-        const response = await axios.get(`/api/player/${id}`)
+        const response = await axios.get(`/api/player/${id}`);
         const result = await response.data;
         return result;
     }
@@ -66,13 +65,13 @@ function Scoreboard(game) {
             if (game.started) {
                 const result = await fetchPlayer(player.id);
                 const isPlaying = player.id === game.currentPlayer.id && !game.finished;
-                const table = <Board {...result.body} frame={game.frame} frame10={player.frame10} isPlaying={isPlaying} ></Board >
+                const table = <Board {...result.body} frame={game.frame} frame10={player.frame10} isPlaying={isPlaying} ></Board >;
                 const index = boards.findIndex(board => board.id === player.id);
                 boards.splice(index, 1, { id: player.id, score: table });
                 setBoards([...boards]);
             }
             else if ((game.players.length - 1 === index)) {
-                const table = <Board {...player}></Board>
+                const table = <Board {...player}></Board>;
                 setBoards([...boards, { id: player.id, score: table }]);
             }
         });
@@ -99,15 +98,15 @@ function useScores(player) {
         let consecutiveScore = "";
         if (player.scoreboardScores !== undefined) {
             if (index < player.scoreboardScores.length) {
-                roll1 = player.scoreboardScores[index][0]
-                roll2 = player.scoreboardScores[index][1]
-                consecutiveScore = player.consecutiveScores[index]
+                roll1 = player.scoreboardScores[index][0];
+                roll2 = player.scoreboardScores[index][1];
+                consecutiveScore = player.consecutiveScores[index];
                 if (roll1 === 10) {
                     roll1 = "X";
                     roll2 = "";
                 }
                 else if (roll1 + roll2 === 10) {
-                    roll2 = `/`
+                    roll2 = `/`;
                 }
             }
         }
@@ -146,7 +145,7 @@ function useScores(player) {
 function Board(player) {
     const classes = useStyles();
     const { scores, consecutiveScores } = useScores(player);
-    
+
     const table = (
         <TableContainer component={Paper}>
             <Table className={classes.table} aria-label="simple table">

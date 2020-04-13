@@ -18,10 +18,9 @@ function Pins(game) {
         if (game.started) {
             generateScoreButtons();
         }
-    }, [game.score, game.currentPlayer])
+    }, [game.score, game.currentPlayer]);
 
     function generateScoreButtons() {
-
         let pins = [];
         for (let pin = 0; pin <= 10 - game.frameScore; pin++) {
 
