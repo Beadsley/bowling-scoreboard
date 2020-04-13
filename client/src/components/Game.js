@@ -13,7 +13,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
 function Game() {
   const [game, setGame] = useState({ started: false, roll: 0, score: [], frame: 1, frameScore: 0, currentPlayer: { id: undefined, name: undefined, frame10: "nothing" }, restart: false, finished: false, scoreAdded: false });
   const classes = useStyles();
