@@ -35,6 +35,7 @@ const useStyles = makeStyles(theme => ({
 function Scoreboard(game) {
     const [boards, setBoards] = useState([]);
 
+
     useEffect(() => {
         if (game.players.length !== 0) {
             generateBoards();
