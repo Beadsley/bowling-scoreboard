@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from "axios";
 import { useAlert } from 'react-alert'
 import { makeStyles, Input, InputLabel, InputAdornment, FormControl, Icon, Button } from '@material-ui/core';
 import AccountCircle from '@material-ui/icons/AccountCircle';
@@ -23,16 +24,8 @@ function InputPlayer(game) {
     }
 
     async function createPlayer(name) {
-        const response = await fetch('/api/player/', {
-            method: 'post',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                name: name,
-            })
-        })
-        const { _id } = await response.json();
+        const response = await axios.post('/api/player/', { name });        
+        const { _id } = await response.data;
         game.addPlayer(_id, name);
     }
 

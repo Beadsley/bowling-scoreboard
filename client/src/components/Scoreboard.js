@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axios from "axios";
 import '../styles/App.css';
 import { makeStyles } from '@material-ui/core/styles';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Icon } from '@material-ui/core';
@@ -41,7 +42,7 @@ function Scoreboard(game) {
     }, [game.players]);
 
     useEffect(() => {
-        if(game.started){            
+        if (game.started) {
             generateBoards();
         }
     }, [game.currentPlayer, game.finished]);
@@ -53,12 +54,12 @@ function Scoreboard(game) {
     }, [game.restart]);
 
     async function fetchPlayer(id) {
-        const response = await fetch(`/api/player/${id}`)
-        const result = await response.json();
+        const response = await axios.get(`/api/player/${id}`)
+        const result = await response.data;
         return result;
     }
 
-    function generateBoards() {        
+    function generateBoards() {
         game.players.forEach(async (player, index) => {
 
             if (game.started) {
