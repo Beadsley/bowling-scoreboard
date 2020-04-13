@@ -3,6 +3,34 @@ import '../styles/App.css';
 import { makeStyles } from '@material-ui/core/styles';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Icon } from '@material-ui/core';
 
+const useStyles = makeStyles(theme => ({
+    table: {
+        minWidth: 1000,
+        tableLayout: 'fixed',
+    },
+    header: {
+        backgroundColor: theme.palette.secondary.main,
+        color: 'white',
+        fontWeight: 900,
+        width: 100,
+        height: 30,
+    },
+    'frame-header': {
+        color: 'white',
+        fontWeight: 900,
+    },
+    name: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-evenly'
+    },
+    roll: {
+        borderWidth: ' 0.0625rem',
+        borderStyle: 'solid',
+        borderColor: `${theme.palette.secondary.main} #ccc`
+    }
+}));
+
 function Scoreboard(game) {
     const [boards, setBoards] = useState([]);
 
@@ -13,10 +41,10 @@ function Scoreboard(game) {
     }, [game.players]);
 
     useEffect(() => {
-        if (game.scoreAdded==true) {
+        if(game.started){            
             generateBoards();
         }
-    }, [game.scoreAdded]);
+    }, [game.currentPlayer, game.finished]);
 
     useEffect(() => {
         if (game.restart) {
@@ -30,7 +58,7 @@ function Scoreboard(game) {
         return result;
     }
 
-    function generateBoards() {
+    function generateBoards() {        
         game.players.forEach(async (player, index) => {
 
             if (game.started) {
@@ -58,35 +86,7 @@ function Scoreboard(game) {
     );
 }
 
-function Board(player) {
-    const useStyles = makeStyles(theme => ({
-        table: {
-            minWidth: 1000,
-            tableLayout: 'fixed',
-        },
-        header: {
-            backgroundColor: theme.palette.secondary.main,
-            color: 'white',
-            fontWeight: 900,
-            width: 100,
-            height: 30,
-        },
-        'frame-header': {
-            color: 'white',
-            fontWeight: 900,
-        },
-        name: {
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-evenly'
-        },
-        roll: {
-            borderWidth: ' 0.0625rem',
-            borderStyle: 'solid',
-            borderColor: `${theme.palette.secondary.main} #ccc`
-        }
-    }));
-
+function useScores(player) {
     const classes = useStyles();
     let scores = [];
     let consecutiveScores = [];
@@ -94,7 +94,7 @@ function Board(player) {
         const frame10extraRoll = player.frame === 11 && player.scoreboardScores.length === 11 && index === 9 && player.frame10 !== 'nothing';
         let roll1 = "";
         let roll2 = "";
-        let consecutiveScore = ".";
+        let consecutiveScore = "";
         if (player.scoreboardScores !== undefined) {
             if (index < player.scoreboardScores.length) {
                 roll1 = player.scoreboardScores[index][0]
@@ -116,22 +116,34 @@ function Board(player) {
             scores.push(<TableCell className={classes.roll} align="right">{roll1}</TableCell>);
             scores.push(<TableCell className={classes.roll} align="center">{frame10roll1 === 10 ? "X" : frame10roll1}</TableCell>);
             scores.push(<TableCell className={classes.roll} align="left">{frame10roll2 === 10 ? "X" : frame10roll2}</TableCell>);
+            consecutiveScores.push(<TableCell align="center" colspan="3">{consecutiveScore}</TableCell>);
         }
         else if (frame10extraRoll && player.frame10 === 'spare') {
             scores.push(<TableCell className={classes.roll} align="right">{roll1}</TableCell>);
             scores.push(<TableCell className={classes.roll} align="center">{roll2}</TableCell>);
             scores.push(<TableCell className={classes.roll} align="left">{player.scoreboardScores[10][0]}</TableCell>);
+            consecutiveScores.push(<TableCell align="center" colspan="3">{consecutiveScore}</TableCell>);
         }
         else if (index === 9) {
             scores.push(<TableCell className={classes.roll} align="right">{roll1}</TableCell>);
             scores.push(<TableCell className={classes.roll} align="left">{roll2}</TableCell>);
             scores.push(<TableCell className={classes.roll} align="center"></TableCell>);
+            consecutiveScores.push(<TableCell align="center" colspan="3">{consecutiveScore}</TableCell>);
         } else {
             scores.push(<TableCell className={classes.roll} align="right">{roll1}</TableCell>);
             scores.push(<TableCell className={classes.roll} align="left">{roll2}</TableCell>);
+            consecutiveScores.push(<TableCell align="center" colspan="2">{consecutiveScore}</TableCell>);
         }
-        consecutiveScores.push(index === 9 ? <TableCell align="center" colspan="3">{consecutiveScore}</TableCell> : <TableCell align="center" colspan="2">{consecutiveScore}</TableCell>)
     }
+    return {
+        scores,
+        consecutiveScores
+    }
+}
+
+function Board(player) {
+    const classes = useStyles();
+    const { scores, consecutiveScores } = useScores(player);
 
     const table = (
         <TableContainer component={Paper}>
