@@ -79,7 +79,7 @@ function Scoreboard(game) {
     return (
         <>
             <h2>{game.currentPlayer && !game.finished && game.started ? game.currentPlayer.name + " your up!" : ""} </h2>
-            <h2>{game.finished && game.started ? "its all over!" : ""} </h2>
+            <h2>{game.finished && game.started ? "It's all over!" : ""} </h2>
             <div className="boards-container">
                 {boards.map((board, i) => <div key={i} className="board-container">{board.score}</div>)}
             </div>
