@@ -8,7 +8,7 @@ function Players(game) {
 
   useEffect(() => {
     if (game.started) {
-      selectPlayer()
+      selectPlayer();
     }
   }, [game.started])
 
@@ -26,9 +26,13 @@ function Players(game) {
 
   useEffect(() => {
     if (game.started) {
-      deletePlayers()
+      deletePlayers();
     }
   }, [game.restart])
+
+  window.onbeforeunload = () => {
+    deletePlayers();
+  };
 
   function addPlayer(id, name) {
     const player = {

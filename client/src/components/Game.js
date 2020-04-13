@@ -7,11 +7,12 @@ import Icon from '@material-ui/core/Icon';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-      '& > *': {
-          margin: theme.spacing(1),
-      },
+    '& > *': {
+      margin: theme.spacing(1),
+    },
   },
 }));
+
 
 function Game() {
   const [game, setGame] = useState({ started: false, roll: 0, score: [], frame: 1, frameScore: 0, currentPlayer: { id: undefined, name: undefined, frame10: "nothing" }, restart: false, finished: false, scoreAdded: false });
