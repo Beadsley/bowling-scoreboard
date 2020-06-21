@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import { createPlayer } from '../services/network/api';
 import { makeStyles, Input, InputLabel, InputAdornment, FormControl, Icon, Button } from '@material-ui/core';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import Alert from './Alert';
@@ -34,8 +34,8 @@ function InputPlayer(game) {
     setUserInput(e.target.value);
   }
 
-  async function createPlayer(name) {
-    const response = await axios.post('/api/player/', { name });
+  async function handleCreatePlayer(name) {
+    const response = await createPlayer(name);
     const { _id } = await response.data;
     game.addPlayer(_id, name);
     openAlert && setOpenAlert(false);
@@ -62,7 +62,7 @@ function InputPlayer(game) {
           onSubmit={(e) => {
             e.preventDefault();
             e.stopPropagation();
-            createPlayer(userInput);
+            handleCreatePlayer(userInput);
             setUserInput('');
           }}
         >

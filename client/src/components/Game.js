@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import axios from "axios";
 import Pins from './Pins';
 import Players from './Players';
 import { makeStyles, Button } from '@material-ui/core/';
 import Icon from '@material-ui/core/Icon';
+import { appendScore } from "../services/network/api";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -36,7 +36,8 @@ function Game() {
   }
 
   async function addScore() {
-    const response = await axios.put(`/api/player/score/${game.currentPlayer.id}`, { "roll": game.score });
+    const response = await appendScore(game.currentPlayer.id,  game.score)
+    
     if (response.status === 200) {
       setGame({ ...game, scoreAdded: true });
     }
