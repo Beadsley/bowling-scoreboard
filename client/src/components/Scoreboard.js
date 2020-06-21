@@ -5,6 +5,16 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Icon } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
+    boardContainer: {
+        width: '100%',
+        margin: 'auto',
+    },
+    boardsContainer: {
+        marginTop: theme.spacing(1),
+        marginBottom: theme.spacing(1),
+        display: 'grid',
+        gridGap: theme.spacing(1),
+    },
     table: {
         minWidth: 1000,
         tableLayout: 'fixed',
@@ -16,7 +26,7 @@ const useStyles = makeStyles(theme => ({
         width: 100,
         height: 30,
     },
-    'frame-header': {
+    frameHeader: {
         color: 'white',
         fontWeight: 900,
     },
@@ -33,6 +43,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function Scoreboard(game) {
+    const classes = useStyles();
     const [boards, setBoards] = useState([]);
 
     useEffect(() => {
@@ -80,8 +91,8 @@ function Scoreboard(game) {
         <>
             <h2>{game.currentPlayer && !game.finished && game.started ? game.currentPlayer.name + " your up!" : ""} </h2>
             <h2>{game.finished && game.started ? "It's all over!" : ""} </h2>
-            <div className="boards-container">
-                {boards.map((board, i) => <div key={i} className="board-container">{board.score}</div>)}
+            <div className={classes.boardsContainer}>
+                {boards.map((board, i) => <div key={i} className={classes.boardContainer}>{board.score}</div>)}
             </div>
         </>
     );
@@ -152,16 +163,7 @@ function Board(player) {
                 <TableHead>
                     <TableRow className={classes.header}>
                         <TableCell className={classes.header}>Name </TableCell>
-                        <TableCell className={classes["frame-header"]} align="center" colSpan="2">1</TableCell>
-                        <TableCell className={classes["frame-header"]} align="center" colSpan="2">2</TableCell>
-                        <TableCell className={classes["frame-header"]} align="center" colSpan="2">3</TableCell>
-                        <TableCell className={classes["frame-header"]} align="center" colSpan="2">4</TableCell>
-                        <TableCell className={classes["frame-header"]} align="center" colSpan="2">5</TableCell>
-                        <TableCell className={classes["frame-header"]} align="center" colSpan="2">6</TableCell>
-                        <TableCell className={classes["frame-header"]} align="center" colSpan="2">7</TableCell>
-                        <TableCell className={classes["frame-header"]} align="center" colSpan="2">8</TableCell>
-                        <TableCell className={classes["frame-header"]} align="center" colSpan="2">9</TableCell>
-                        <TableCell className={classes["frame-header"]} align="center" colSpan="3">10</TableCell>
+                        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(frame => <TableCell className={classes.frameHeader} align="center" colSpan={frame === 10 ? "3" : "2"}>{frame}</TableCell>)}
                         <TableCell className={classes.header} align="right">Total</TableCell>
                     </TableRow>
                 </TableHead>

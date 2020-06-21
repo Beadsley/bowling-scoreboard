@@ -8,6 +8,11 @@ const useStyles = makeStyles((theme) => ({
             margin: theme.spacing(1),
         },
     },
+    pinsContainer: {
+        display: 'flex',
+        justifyContent: 'center',
+        flexDirection: 'row',
+      }
 }));
 
 function Pins(game) {
@@ -41,7 +46,7 @@ function Pins(game) {
     return (
         <>
             <h2>Click Number of Pins Knocked Down!</h2>
-            <div className="pins-container">
+            <div className={classes.pinsContainer}>
                 {buttons}
             </div>
         </>

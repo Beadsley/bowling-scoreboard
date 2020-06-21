@@ -12,6 +12,18 @@ const useStyles = makeStyles((theme) => ({
     button: {
         margin: theme.spacing(1),
     },
+    formContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+    }
+    ,
+    inputContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    }
 }));
 
 function InputPlayer(game) {
@@ -24,14 +36,14 @@ function InputPlayer(game) {
     }
 
     async function createPlayer(name) {
-        const response = await axios.post('/api/player/', { name });        
+        const response = await axios.post('/api/player/', { name });
         const { _id } = await response.data;
         game.addPlayer(_id, name);
     }
 
     return (
-        <div className="input-container" style={game.started ? { visibility: "hidden" } : { visibility: "visible" }}>
-            <Form className="form-container"
+        <div className={classes.inputContainer} style={game.started ? { visibility: "hidden" } : { visibility: "visible" }}>
+            <Form className={classes.formContainer}
                 onChange={handleUserInput}
                 onSubmit={(e) => {
                     e.preventDefault();

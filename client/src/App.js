@@ -6,7 +6,7 @@ import { makeStyles, AppBar, Toolbar, Typography, MuiThemeProvider, createMuiThe
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    minWidth:1200,
+    minWidth: 1200,
   },
   title: {
     flexGrow: 1,
@@ -16,17 +16,20 @@ const useStyles = makeStyles((theme) => ({
 
 const theme = createMuiTheme({
   palette: {
-     primary: {
-        light: '#fff',
-        main: 'rgb(23, 105, 170)',
-        dark: '#000'
-     },
-     secondary: {
-       main: '#58a5f0',
-     },
+    primary: {
+      light: '#fff',
+      main: 'rgb(23, 105, 170)',
+      dark: '#000'
+    },
+    secondary: {
+      main: '#58a5f0',
+    },
   },
-  typography: { 
-     useNextVariants: true
+  typography: {
+    fontFamily: [
+      'Baloo 2',
+      'cursive',
+    ].join(','),
   }
 });
 
@@ -36,15 +39,15 @@ function App() {
 
   return (
     <div className={classes.root}>
-      <MuiThemeProvider theme = { theme }>
-      <AppBar position="static">
-        <Toolbar>
-          <Typography variant="h6" className={classes.title}>
-            Bowling Scoreboard
+      <MuiThemeProvider theme={theme}>
+        <AppBar position="static">
+          <Toolbar>
+            <Typography variant="h6" className={classes.title}>
+              Bowling Scoreboard
         </Typography>
-        </Toolbar>
-      </AppBar>
-      <Game />
+          </Toolbar>
+        </AppBar>
+        <Game />
       </MuiThemeProvider>
     </div>
   );

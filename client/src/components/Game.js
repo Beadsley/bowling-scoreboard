@@ -7,9 +7,8 @@ import Icon from '@material-ui/core/Icon';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    '& > *': {
-      margin: theme.spacing(1),
-    },
+    padding: theme.spacing(4),
+    textAlign: 'center',
   },
 }));
 
@@ -57,7 +56,7 @@ function Game() {
   }
 
   return (
-    <div className="container">
+    <div className={classes.root}>
       {game.finished || !game.started ? "" : <Pins {...game} update={updateAfterRoll}></Pins>}
       <Players {...game} startGame={startGame} update={updateGame} ></Players>
       <Button
