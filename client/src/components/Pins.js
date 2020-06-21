@@ -13,6 +13,9 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     flexDirection: 'row',
   },
+  invisible: {
+    visibility: 'hidden',
+  },
 }));
 
 function Pins(props) {
@@ -46,7 +49,9 @@ function Pins(props) {
   return (
     <>
       <h2>Click Number of Pins Knocked Down!</h2>
-      <div className={classes.pinsContainer}>{buttons}</div>
+      <div className={props.roll === 2 ? `${classes.invisible} ${classes.pinsContainer}` : classes.pinsContainer}>
+        {buttons}
+      </div>
     </>
   );
 }
