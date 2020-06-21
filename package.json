@@ -28,7 +28,6 @@
     "onchange": "^6.1.0"
   },
   "dependencies": {
-    "@material-ui/lab": "^4.0.0-alpha.56",
     "body-parser": "^1.19.0",
     "client": "file:client",
     "concurrently": "^5.1.0",
