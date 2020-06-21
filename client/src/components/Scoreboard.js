@@ -41,27 +41,27 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Scoreboard(game) {
+function Scoreboard(props) {
   const classes = useStyles();
   const [boards, setBoards] = useState([]);
 
   useEffect(() => {
-    if (game.players.length !== 0) {
+    if (props.players.length !== 0) {
       generateBoards();
     }
-  }, [game.players]);
+  }, [props.players]);
 
   useEffect(() => {
-    if (game.started) {
+    if (props.started) {
       generateBoards();
     }
-  }, [game.currentPlayer, game.finished]);
+  }, [props.currentPlayer, props.finished]);
 
   useEffect(() => {
-    if (game.restart) {
+    if (props.restart) {
       setBoards([]);
     }
-  }, [game.restart]);
+  }, [props.restart]);
 
   async function fetchPlayer(id) {
     const { data } = await player(id);
@@ -69,17 +69,17 @@ function Scoreboard(game) {
   }
 
   function generateBoards() {
-    game.players.forEach(async (player, index) => {
-      if (game.started) {
+    props.players.forEach(async (player, index) => {
+      if (props.started) {
         const result = await fetchPlayer(player.id);
-        const isPlaying = player.id === game.currentPlayer.id && !game.finished;
+        const isPlaying = player.id === props.currentPlayer.id && !props.finished;
         const table = (
-          <Board {...result.body} frame={game.frame} frame10={player.frame10} isPlaying={isPlaying}></Board>
+          <Board {...result.body} frame={props.frame} frame10={player.frame10} isPlaying={isPlaying}></Board>
         );
         const index = boards.findIndex((board) => board.id === player.id);
         boards.splice(index, 1, { id: player.id, score: table });
         setBoards([...boards]);
-      } else if (game.players.length - 1 === index) {
+      } else if (props.players.length - 1 === index) {
         const table = <Board {...player}></Board>;
         setBoards([...boards, { id: player.id, score: table }]);
       }
@@ -87,8 +87,8 @@ function Scoreboard(game) {
   }
   return (
     <>
-      <h2>{game.currentPlayer && !game.finished && game.started ? game.currentPlayer.name + ' your up!' : ''} </h2>
-      <h2>{game.finished && game.started ? "It's all over!" : ''} </h2>
+      {props.currentPlayer && !props.finished && props.started && <h2>{`${props.currentPlayer.name} your up!`}</h2>}
+      {props.finished && props.started && <h2>It's all over!</h2>}
       <div className={classes.boardsContainer}>
         {boards.map((board, i) => (
           <div key={i} className={classes.boardContainer}>
@@ -110,7 +110,7 @@ function useScores(player) {
     let roll1 = '';
     let roll2 = '';
     let consecutiveScore = '';
-    if (player.scoreboardScores !== undefined) {
+    if (player.scoreboardScores) {
       if (index < player.scoreboardScores.length) {
         roll1 = player.scoreboardScores[index][0];
         roll2 = player.scoreboardScores[index][1];
@@ -128,76 +128,76 @@ function useScores(player) {
       const frame10roll1 = player.scoreboardScores[10][0];
       const frame10roll2 = player.scoreboardScores[10][1];
       scores.push(
-        <TableCell className={classes.roll} align='right'>
+        <TableCell key={`roll1-${scores.length}`} className={classes.roll} align='right'>
           {roll1}
         </TableCell>
       );
       scores.push(
-        <TableCell className={classes.roll} align='center'>
+        <TableCell key={`roll2-${scores.length}`} className={classes.roll} align='center'>
           {frame10roll1 === 10 ? 'X' : frame10roll1}
         </TableCell>
       );
       scores.push(
-        <TableCell className={classes.roll} align='left'>
+        <TableCell key={`roll3-${scores.length}`} className={classes.roll} align='left'>
           {frame10roll2 === 10 ? 'X' : frame10roll2}
         </TableCell>
       );
       consecutiveScores.push(
-        <TableCell align='center' colSpan='3'>
+        <TableCell key={`consecutiveScores-${scores.length}`} align='center' colSpan='3'>
           {consecutiveScore}
         </TableCell>
       );
     } else if (frame10extraRoll && player.frame10 === 'spare') {
       scores.push(
-        <TableCell className={classes.roll} align='right'>
+        <TableCell key={`roll1-${scores.length}`} className={classes.roll} align='right'>
           {roll1}
         </TableCell>
       );
       scores.push(
-        <TableCell className={classes.roll} align='center'>
+        <TableCell key={`roll2-${scores.length}`} className={classes.roll} align='center'>
           {roll2}
         </TableCell>
       );
       scores.push(
-        <TableCell className={classes.roll} align='left'>
+        <TableCell key={`roll3-${scores.length}`} className={classes.roll} align='left'>
           {player.scoreboardScores[10][0]}
         </TableCell>
       );
       consecutiveScores.push(
-        <TableCell align='center' colSpan='3'>
+        <TableCell key={`consecutiveScores-${scores.length}`} align='center' colSpan='3'>
           {consecutiveScore}
         </TableCell>
       );
     } else if (index === 9) {
       scores.push(
-        <TableCell className={classes.roll} align='right'>
+        <TableCell key={`roll1-${scores.length}`} className={classes.roll} align='right'>
           {roll1}
         </TableCell>
       );
       scores.push(
-        <TableCell className={classes.roll} align='left'>
+        <TableCell key={`roll2-${scores.length}`} className={classes.roll} align='left'>
           {roll2}
         </TableCell>
       );
-      scores.push(<TableCell className={classes.roll} align='center'></TableCell>);
+      scores.push(<TableCell key={`roll3-${scores.length}`} className={classes.roll} align='center'></TableCell>);
       consecutiveScores.push(
-        <TableCell align='center' colSpan='3'>
+        <TableCell key={`consecutiveScores-${scores.length}`} align='center' colSpan='3'>
           {consecutiveScore}
         </TableCell>
       );
     } else {
       scores.push(
-        <TableCell className={classes.roll} align='right'>
+        <TableCell key={`roll1-${scores.length}`} className={classes.roll} align='right'>
           {roll1}
         </TableCell>
       );
       scores.push(
-        <TableCell className={classes.roll} align='left'>
+        <TableCell key={`roll2-${scores.length}`} className={classes.roll} align='left'>
           {roll2}
         </TableCell>
       );
       consecutiveScores.push(
-        <TableCell align='center' colSpan='2'>
+        <TableCell key={`consecutiveScores-${scores.length}`} align='center' colSpan='2'>
           {consecutiveScore}
         </TableCell>
       );
@@ -220,7 +220,12 @@ function Board(player) {
           <TableRow className={classes.header}>
             <TableCell className={classes.header}>Name </TableCell>
             {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((frame) => (
-              <TableCell className={classes.frameHeader} align='center' colSpan={frame === 10 ? '3' : '2'}>
+              <TableCell
+                key={`frame-${frame}`}
+                className={classes.frameHeader}
+                align='center'
+                colSpan={frame === 10 ? '3' : '2'}
+              >
                 {frame}
               </TableCell>
             ))}

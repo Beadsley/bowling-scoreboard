@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function InputPlayer(game) {
+function InputPlayer(props) {
   const [userInput, setUserInput] = useState('');
   const [openAlert, setOpenAlert] = useState(false);
   const classes = useStyles();
@@ -34,11 +34,14 @@ function InputPlayer(game) {
     setUserInput(e.target.value);
   }
 
-  async function handleCreatePlayer(name) {
-    const response = await createPlayer(name);
+  async function handleCreatePlayer(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    const response = await createPlayer(userInput);
     const { _id } = await response.data;
-    game.addPlayer(_id, name);
+    props.addPlayer(_id, userInput);
     openAlert && setOpenAlert(false);
+    setUserInput('');
   }
 
   function handleAlert() {
@@ -54,18 +57,9 @@ function InputPlayer(game) {
       <Alert message='Add a player...' open={openAlert} closeAlert={handleCloseAlert} />
       <div
         className={classes.inputContainer}
-        style={game.started ? { visibility: 'hidden' } : { visibility: 'visible' }}
+        style={props.started ? { visibility: 'hidden' } : { visibility: 'visible' }}
       >
-        <Form
-          className={classes.formContainer}
-          onChange={handleUserInput}
-          onSubmit={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            handleCreatePlayer(userInput);
-            setUserInput('');
-          }}
-        >
+        <Form className={classes.formContainer} onChange={handleUserInput} onSubmit={handleCreatePlayer}>
           <FormControl className={classes.margin} onChange={handleUserInput} required>
             <InputLabel htmlFor='input-with-icon-adornment'>Add a player...</InputLabel>
             <Input
@@ -92,7 +86,7 @@ function InputPlayer(game) {
           color='primary'
           className={classes.button}
           endIcon={<Icon>send</Icon>}
-          onClick={game.players.length !== 0 ? game.startGame : () => handleAlert()}
+          onClick={props.players.length !== 0 ? props.startGame : handleAlert}
         >
           Start
         </Button>

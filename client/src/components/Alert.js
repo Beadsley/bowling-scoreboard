@@ -1,9 +1,8 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Alert from '@material-ui/lab/Alert';
 import { IconButton, Collapse } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
-import { scryRenderedDOMComponentsWithTag } from 'react-dom/test-utils';
 
 const useStyles = makeStyles((theme) => ({
   root: {

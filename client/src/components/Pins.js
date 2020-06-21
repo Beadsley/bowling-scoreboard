@@ -3,55 +3,52 @@ import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 
 const useStyles = makeStyles((theme) => ({
-    root: {
-        '& > *': {
-            margin: theme.spacing(1),
-        },
+  root: {
+    '& > *': {
+      margin: theme.spacing(1),
     },
-    pinsContainer: {
-        display: 'flex',
-        justifyContent: 'center',
-        flexDirection: 'row',
-      }
+  },
+  pinsContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    flexDirection: 'row',
+  },
 }));
 
-function Pins(game) {
-    const [buttons, setButtons] = useState([]);
-    const classes = useStyles();
+function Pins(props) {
+  const [buttons, setButtons] = useState([]);
+  const classes = useStyles();
 
-    useEffect(() => {
-        if (game.started) {
-            generateScoreButtons();
-        }
-    }, [game.score, game.currentPlayer]);
+  useEffect(() => {
+    props.started && handleGenerateScoreButtons();
+  }, [props.score, props.currentPlayer]);
 
-    function generateScoreButtons() {
-        let pins = [];
-        for (let pin = 0; pin <= 10 - game.frameScore; pin++) {
-
-            pins.push(
-                <div className={classes.root} >
-                    <Button variant="contained" color="primary"
-                        onClick={() => {
-                            game.update(pin);
-                        }}>
-                        {pin}
-                    </Button>
-                </div>
-            )
-        }
-        setButtons(pins);
+  function handleGenerateScoreButtons() {
+    let pins = [];
+    for (let pin = 0; pin <= 10 - props.frameScore; pin++) {
+      pins.push(
+        <div key={`pin-${pin}`} className={classes.root}>
+          <Button
+            variant='contained'
+            color='primary'
+            onClick={() => {
+              props.update(pin);
+            }}
+          >
+            {pin}
+          </Button>
+        </div>
+      );
     }
+    setButtons(pins);
+  }
 
-    return (
-        <>
-            <h2>Click Number of Pins Knocked Down!</h2>
-            <div className={classes.pinsContainer}>
-                {buttons}
-            </div>
-        </>
-    )
+  return (
+    <>
+      <h2>Click Number of Pins Knocked Down!</h2>
+      <div className={classes.pinsContainer}>{buttons}</div>
+    </>
+  );
 }
 
 export default Pins;
-
