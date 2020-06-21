@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Bowling Scoreboard",
+  "name": "To help you keep track of the score.",
   "icons": [
     {
       "src": "favicon.ico",
