@@ -22,7 +22,7 @@
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-mocha": "^6.2.1",
-    "mocha": "^6.2.2",
+    "mocha": "^10.2.0",
     "morgan": "^1.9.1",
     "nodemon": "^2.0.2",
     "onchange": "^6.1.0"
